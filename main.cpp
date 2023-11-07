@@ -23,7 +23,7 @@ int main(int argc, char** argv) {
   try {
     Petsc::Context::Instance(&argc, &argv);
 
-    Petsc::Int globalSize = 1'000'000;
+    Petsc::Int globalSize = 500;
 
     auto x = Petsc::Vec::FromOptions(globalSize, "Approximate solution");
     auto b = Petsc::Vec::Duplicate(x);
@@ -34,7 +34,7 @@ int main(int argc, char** argv) {
 
     Petsc::Mat A(localSize, localSize, globalSize, globalSize, "Linear system");
 
-    // `stencil laplace operator`
+    // Stencil laplace operator
     {
       Petsc::Int i;
       Petsc::Int col[3];
@@ -74,34 +74,19 @@ int main(int argc, char** argv) {
       A.AssemblyEnd(MAT_FINAL_ASSEMBLY);
     }
 
-    /*
-      Set exact solution; then compute right-hand-side vector.
-    */
+    // Set exact solution; then compute right-hand-side vector
     PetscCall(VecSet(u, 1.0));
     PetscCall(MatMult(A, u, b));
 
-    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-                  Create the linear solver and set various options
-      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+    // Create the linear solver and set various options
     KSP ksp;
     PetscCall(KSPCreate(PETSC_COMM_WORLD, &ksp));
     PetscCall(KSPSetOperators(ksp, A, A));
     PetscCall(KSPSetTolerances(ksp, 1e-5, 1e-5, PETSC_DEFAULT, PETSC_DEFAULT));
     PetscCall(KSPSetFromOptions(ksp));
-
-    // PC  pc;
-    // PetscCall(KSPGetPC(ksp, &pc));
-    // PetscCall(PCSetType(pc, PCNONE));
-    // PetscCall(PCSetFromOptions(pc));
-
-    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-                        Solve the linear system
-      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
     PetscCall(KSPSolve(ksp, b, x));
 
-    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-                        Check the solution and clean up
-      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+    // Check the solution and clean up
     Petsc::Int its;
     Petsc::Real error_norm;
     PetscCall(KSPView(ksp, PETSC_VIEWER_STDOUT_WORLD));
@@ -109,24 +94,6 @@ int main(int argc, char** argv) {
     PetscCall(VecNorm(x, NORM_2, &error_norm));
     PetscCall(KSPGetIterationNumber(ksp, &its));
     PetscCall(PetscPrintf(PETSC_COMM_WORLD, "Norm of error %g, Iterations %" PetscInt_FMT "\n", (double)error_norm, its));
-
-    /* check that KSP automatically handles the fact that the the new non-zero values in the matrix are propagated to the KSP solver */
-    PetscCall(MatShift(A, 2.0));
-    PetscCall(KSPSolve(ksp, b, x));
-
-    PetscCall(KSPDestroy(&ksp));
-
-    /* test if prefixes properly propagate to PCMPI objects */
-    if (PCMPIServerActive)
-    {
-      PetscCall(KSPCreate(PETSC_COMM_WORLD, &ksp));
-      PetscCall(KSPSetOptionsPrefix(ksp, "prefix_test_"));
-      PetscCall(MatSetOptionsPrefix(A, "prefix_test_"));
-      PetscCall(KSPSetOperators(ksp, A, A));
-      PetscCall(KSPSetFromOptions(ksp));
-      PetscCall(KSPSolve(ksp, b, x));
-      PetscCall(KSPDestroy(&ksp));
-    }
   }
   catch (const std::exception& e) {
     std::cout << e.what() << std::endl;
