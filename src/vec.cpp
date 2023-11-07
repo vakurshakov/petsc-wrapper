@@ -25,7 +25,7 @@ Vec::Vec(Int localSize, Int globalSize, std::string_view name) {
   return vec;
 }
 
-/* static */ Vec Vec::Duplicate(const Vec &other) {
+/* static */ Vec Vec::Duplicate(const Vec& other) {
   Vec vec;
   PetscCallThrow(VecDuplicate(other.data, &vec.data));
   return vec;
@@ -44,19 +44,18 @@ Int Vec::LocalSize() const {
 }
 
 std::pair<Int, Int> Vec::GetOwnershipRange() const {
-  Int rstart, rend;
-  PetscCallThrow(VecGetOwnershipRange(data, &rstart, &rend));
-  return std::make_pair(rstart, rend);
+  Int localStart, localEnd;
+  PetscCallThrow(VecGetOwnershipRange(data, &localStart, &localEnd));
+  return std::make_pair(localStart, localEnd);
 }
 
 Vec::iterator Vec::begin() {
-  auto [start, _] = GetOwnershipRange();
-  return iterator(*this, start);
+  return iterator(*this, 0);
 }
 
 Vec::iterator Vec::end() {
-  auto [_, end] = GetOwnershipRange();
-  return iterator(*this, end);
+  Int localSize = LocalSize();
+  return iterator(*this, localSize);
 }
 
 void Vec::SetValues(Int size, const Int idx[], const Scalar values[], InsertMode mode) {

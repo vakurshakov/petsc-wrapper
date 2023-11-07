@@ -2,17 +2,18 @@
 #define SRC_VEC_H
 
 #include <string>
-#include <type_traits>
 
 #include <petscvec.h>
 
 #include "context.h"
 #include "macros.h"
 
-
-#include <iostream>
-
 namespace Petsc {
+
+/// @todo Create indexes<T> to reduce the need in array size.
+/// @todo Create [const_]view<T> for objects that should be restored after usage.
+/// @todo Implement Vec::iterator::value(), Vec::iterator::index() methods.
+/// @note Is it important that views should be restored before next gather/scatter?
 
 class Vec {
  public:
@@ -36,7 +37,6 @@ class Vec {
   iterator begin();
   iterator end();
 
-  /// @todo create (template?) array_view
   Scalar* GetArray();
   const Scalar* GetArrayRead();
   void RestoreArray(Scalar* array);
@@ -58,7 +58,7 @@ class Vec {
 
 class Vec::iterator {
  public:
-  iterator(Vec& vec, Int current);
+  iterator(Petsc::Vec& vec, Int current);
   ~iterator() noexcept(false);
 
   // Input iterator requirements
@@ -72,7 +72,7 @@ class Vec::iterator {
   Int operator-(const iterator& other) const;
 
  private:
-  Vec& vec;
+  Petsc::Vec& vec;
   Scalar* array;
   Int current;
 };

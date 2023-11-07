@@ -1,8 +1,8 @@
 #include <petscksp.h>
 
-#include "context.h"
-#include "vec.h"
-#include "mat.h"
+#include "src/context.h"
+#include "src/vec.h"
+#include "src/mat.h"
 
 #include <iostream>
 
@@ -29,7 +29,7 @@ int main(int argc, char** argv) {
     auto b = Petsc::Vec::Duplicate(x);
     auto u = Petsc::Vec::Duplicate(x);
 
-    auto [start, end] = x.GetOwnershipRange();
+    auto [localStart, localEnd] = x.GetOwnershipRange();
     auto localSize = x.LocalSize();
 
     Petsc::Mat A(localSize, localSize, globalSize, globalSize, "Linear system");
@@ -40,8 +40,8 @@ int main(int argc, char** argv) {
       Petsc::Int col[3];
       Petsc::Scalar value[3];
 
-      if (!start) {
-        start    = 1;
+      if (!localStart) {
+        localStart = 1;
         i        = 0;
         col[0]   = 0;
         col[1]   = 1;
@@ -49,8 +49,8 @@ int main(int argc, char** argv) {
         value[1] = -1.0;
         A.SetValues(1, &i, 2, col, value, INSERT_VALUES);
       }
-      if (end == globalSize) {
-        end      = globalSize - 1;
+      if (localEnd == globalSize) {
+        localEnd = globalSize - 1;
         i        = globalSize - 1;
         col[0]   = globalSize - 2;
         col[1]   = globalSize - 1;
@@ -63,7 +63,7 @@ int main(int argc, char** argv) {
       value[0] = -1.0;
       value[1] = +2.0;
       value[2] = -1.0;
-      for (i = start; i < end; i++) {
+      for (i = localStart; i < localEnd; i++) {
         col[0] = i - 1;
         col[1] = i;
         col[2] = i + 1;
@@ -96,7 +96,7 @@ int main(int argc, char** argv) {
     PetscCall(PetscPrintf(PETSC_COMM_WORLD, "Norm of error %g, Iterations %" PetscInt_FMT "\n", (double)error_norm, its));
   }
   catch (const std::exception& e) {
-    std::cout << e.what() << std::endl;
+    std::cerr << e.what() << std::endl;
   }
   return 0;
 }
