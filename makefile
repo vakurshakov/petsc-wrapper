@@ -1,7 +1,7 @@
 PETSC_DIR  := $(PWD)/external/petsc
 PETSC_ARCH := linux-mpi-debug
 
-INC_PATH := -I$(PWD)/
+INC_PATH := -I$(PWD)/src
 INC_PATH += -I$(PETSC_DIR)/include -I$(PETSC_DIR)/$(PETSC_ARCH)/include
 
 LIB_PATH := -L$(PETSC_DIR)/$(PETSC_ARCH)/lib
@@ -26,11 +26,11 @@ EXECUTABLE := a.out
 RESDIR := ./
 OBJDIR := ./bin-int
 
-SRCS :=        \
-	main.cpp     \
-	context.cpp  \
-	vec.cpp      \
-	mat.cpp      \
+SRCS :=            \
+	main.cpp         \
+	src/context.cpp  \
+	src/vec.cpp      \
+	src/mat.cpp      \
 
 
 OBJS := $(SRCS:%.cpp=$(OBJDIR)/%.o)
