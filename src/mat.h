@@ -7,6 +7,7 @@
 
 #include "context.h"
 #include "macros.h"
+#include "vec.h"
 
 namespace Petsc {
 
@@ -36,6 +37,8 @@ class Mat {
 
   void AssemblyBegin(MatAssemblyType mode);
   void AssemblyEnd(MatAssemblyType mode);
+
+  void Mult(const Petsc::Vec& in, Petsc::Vec& out) const;
 
   void Destroy();
   ~Mat() noexcept(false);
