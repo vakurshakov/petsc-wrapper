@@ -9,7 +9,7 @@ Vec::Vec(Int localSize, Int globalSize, std::string_view name) {
   PetscCallThrow(VecCreate(PETSC_COMM_WORLD, &data));
   PetscCallThrow(VecSetSizes(data, localSize, globalSize));
   PetscCallThrow(VecSetType(data, VECSTANDARD)); // seq on one process and mpi on multiple
-  PetscCallThrow(VecSetUp(data));
+  PetscCallThrow(VecSetUp(data));                // explicitly setting up internal vec structures
   if (!name.empty()) {
     PetscCallThrow(PetscObjectSetName(*this, name.data()));
   }
@@ -49,6 +49,10 @@ std::pair<Int, Int> Vec::GetOwnershipRange() const {
   return std::make_pair(localStart, localEnd);
 }
 
+void Vec::Set(Scalar scalar) {
+  PetscCallThrow(VecSet(data, scalar));
+}
+
 Vec::iterator Vec::begin() {
   return iterator(*this, 0);
 }
@@ -76,17 +80,17 @@ Scalar* Vec::GetArray() {
   return array;
 }
 
-const Scalar* Vec::GetArrayRead() {
+const Scalar* Vec::GetArrayRead() const {
   const Scalar* array = nullptr;
   PetscCallThrow(VecGetArrayRead(data, &array));
   return array;
 }
 
-void Vec::RestoreArray(Scalar* array) {
+void Vec::RestoreArray(Scalar array[]) {
   PetscCallThrow(VecRestoreArray(data, &array));
 }
 
-void Vec::RestoreArray(const Scalar* array) {
+void Vec::RestoreArray(const Scalar array[]) const {
   PetscCallThrow(VecRestoreArrayRead(data, &array));
 }
 

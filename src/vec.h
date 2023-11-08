@@ -29,6 +29,8 @@ class Vec {
   Int LocalSize() const;
   std::pair<Int, Int> GetOwnershipRange() const;
 
+  void Set(Scalar scalar);
+
   void SetValues(Int size, const Int idx[], const Scalar values[], InsertMode mode);
   void AssemblyBegin();
   void AssemblyEnd();
@@ -38,9 +40,9 @@ class Vec {
   iterator end();
 
   Scalar* GetArray();
-  const Scalar* GetArrayRead();
-  void RestoreArray(Scalar* array);
-  void RestoreArray(const Scalar* array);
+  const Scalar* GetArrayRead() const;
+  void RestoreArray(Scalar array[]);
+  void RestoreArray(const Scalar array[]) const;
 
   void Destroy();
   ~Vec() noexcept(false);
