@@ -7,19 +7,6 @@
 
 #include <iostream>
 
-// #include <Eigen/Sparse>
-// using Operator = Eigen::SparseMatrix<double, Eigen::RowMajor>;
-// Operator some(2, 3);
-// some.insert(0, 1) = 34;
-// some.insert(1, 2) = 56;
-// for (int k = 0; k < some.outerSize(); ++k) {
-//   for (Operator::InnerIterator it(some, k); (bool)it; ++it) {
-//     std::cout << it.row() << "\t";
-//     std::cout << it.col() << "\t";
-//     std::cout << it.value() << std::endl;
-//   }
-// }
-
 int main(int argc, char** argv) {
   try {
     Petsc::Context::Instance(&argc, &argv);
