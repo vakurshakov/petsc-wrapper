@@ -20,6 +20,15 @@ class Mat {
   static Mat FromOptions(Int globalRows, Int globalCols, std::string_view name);
   static Mat FromOptions(Int localRows, Int localCols, Int globalRows, Int globalCols, std::string_view name);
 
+  std::pair<Int, Int> GetSize() const;
+  std::pair<Int, Int> GetLocalSize() const;
+  std::pair<Int, Int> GetOwnershipRange() const;
+  std::pair<Int, Int> GetOwnershipRangeColumn() const;
+  const Int* GetOwnershipRanges() const;
+  const Int* GetOwnershipRangesColumn() const;
+
+  void ZeroEntries();
+
   void SetValues(
     PetscInt rowsSize, const PetscInt rowsIdx[],
     PetscInt colsSize, const PetscInt colsIdx[],

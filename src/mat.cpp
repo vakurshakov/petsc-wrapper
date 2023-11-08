@@ -25,6 +25,46 @@ Mat::Mat(Int localRows, Int localCols, Int globalRows, Int globalCols, std::stri
   return mat;
 }
 
+std::pair<Int, Int> Mat::GetSize() const {
+  Int globalRows, globalCols;
+  PetscCallThrow(MatGetSize(data, &globalRows, &globalCols));
+  return std::make_pair(globalRows, globalCols);
+}
+
+std::pair<Int, Int> Mat::GetLocalSize() const {
+  Int localRows, localCols;
+  PetscCallThrow(MatGetLocalSize(data, &localRows, &localCols));
+  return std::make_pair(localRows, localCols);
+}
+
+std::pair<Int, Int> Mat::GetOwnershipRange() const {
+  Int localStart, localEnd;
+  PetscCallThrow(MatGetOwnershipRange(data, &localStart, &localEnd));
+  return std::make_pair(localStart, localEnd);
+}
+
+std::pair<Int, Int> Mat::GetOwnershipRangeColumn() const {
+  Int localStart, localEnd;
+  PetscCallThrow(MatGetOwnershipRangeColumn(data, &localStart, &localEnd));
+  return std::make_pair(localStart, localEnd);
+}
+
+const Int* Mat::GetOwnershipRanges() const {
+  const Int* localRanges;
+  PetscCallThrow(MatGetOwnershipRanges(data, &localRanges));
+  return localRanges;
+}
+
+const Int* Mat::GetOwnershipRangesColumn() const {
+  const Int* localRanges;
+  PetscCallThrow(MatGetOwnershipRangesColumn(data, &localRanges));
+  return localRanges;
+}
+
+void Mat::ZeroEntries() {
+  PetscCallThrow(MatZeroEntries(data));
+}
+
 void Mat::SetValues(
     PetscInt rowsSize, const PetscInt rowsIdx[],
     PetscInt colsSize, const PetscInt colsIdx[],
