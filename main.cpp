@@ -3,6 +3,7 @@
 #include "src/context.h"
 #include "src/vec.h"
 #include "src/mat.h"
+#include "src/ksp.h"
 
 #include <iostream>
 
@@ -75,25 +76,22 @@ int main(int argc, char** argv) {
     }
 
     // Set exact solution; then compute right-hand-side vector
-    PetscCall(VecSet(u, 1.0));
-    PetscCall(MatMult(A, u, b));
+    u.Set(1.0);
+    A.Mult(u, b);
 
-    // Create the linear solver and set various options
-    KSP ksp;
-    PetscCall(KSPCreate(PETSC_COMM_WORLD, &ksp));
-    PetscCall(KSPSetOperators(ksp, A, A));
-    PetscCall(KSPSetTolerances(ksp, 1e-5, 1e-5, PETSC_DEFAULT, PETSC_DEFAULT));
-    PetscCall(KSPSetFromOptions(ksp));
-    PetscCall(KSPSolve(ksp, b, x));
+    auto ksp = Petsc::KSP::FromOptions("Linear solver");
+    ksp.SetOperators(A, A);
+    ksp.Solve(b, x);
 
     // Check the solution and clean up
-    Petsc::Int its;
+    ksp.View(PETSC_VIEWER_STDOUT_WORLD);
+
     Petsc::Real error_norm;
-    PetscCall(KSPView(ksp, PETSC_VIEWER_STDOUT_WORLD));
     PetscCall(VecAXPY(x, -1.0, u));
     PetscCall(VecNorm(x, NORM_2, &error_norm));
-    PetscCall(KSPGetIterationNumber(ksp, &its));
-    PetscCall(PetscPrintf(PETSC_COMM_WORLD, "Norm of error %g, Iterations %" PetscInt_FMT "\n", (double)error_norm, its));
+
+    Petsc::Int iterations = ksp.GetIterationNumber();
+    PetscCall(PetscPrintf(PETSC_COMM_WORLD, "Norm of error %g, Iterations %" PetscInt_FMT "\n", (double)error_norm, iterations));
   }
   catch (const std::exception& e) {
     std::cerr << e.what() << std::endl;
