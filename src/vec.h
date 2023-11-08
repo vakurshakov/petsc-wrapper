@@ -29,6 +29,26 @@ class Vec {
   Int LocalSize() const;
   std::pair<Int, Int> GetOwnershipRange() const;
 
+  static void WAXPY(Vec& w, Scalar a, const Vec& x, const Vec& y);
+  static void PointwiseMult(Vec& w, const Vec& x, const Vec& y);
+  static void PointwiseDivide(Vec& w, const Vec& x, const Vec& y);
+
+  Petsc::Vec& AXPY(Scalar a, const Vec& x);
+  Petsc::Vec& AYPX(Scalar a, const Vec& x);
+  Petsc::Vec& AXPBY(Scalar a, Scalar b, const Vec& x);
+  Petsc::Vec& AXPBYPCZ(Scalar a, Scalar b, Scalar c, const Vec& x, const Vec& y);
+  Petsc::Vec& Scale(Scalar a);
+  Scalar Dot(const Vec& y);
+  Scalar TDot(const Vec& y);
+  Scalar Sum();
+  Real Norm(NormType type);
+  Real Normalize();
+  std::pair<Int, Real> Max() const;
+  std::pair<Int, Real> Min() const;
+
+  void Abs();
+  void Reciprocal();
+  void Shift(Scalar scalar);
   void Set(Scalar scalar);
 
   void SetValues(Int size, const Int idx[], const Scalar values[], InsertMode mode);

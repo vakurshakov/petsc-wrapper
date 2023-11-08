@@ -49,6 +49,99 @@ std::pair<Int, Int> Vec::GetOwnershipRange() const {
   return std::make_pair(localStart, localEnd);
 }
 
+void Vec::WAXPY(Vec& w, Scalar a, const Vec& x, const Vec& y) {
+  PetscCallThrow(VecWAXPY(w, a, x, y));
+}
+
+void Vec::PointwiseMult(Vec& w, const Vec& x, const Vec& y) {
+  PetscCallThrow(VecPointwiseMult(w, x, y));
+}
+
+void Vec::PointwiseDivide(Vec& w, const Vec& x, const Vec& y) {
+  PetscCallThrow(VecPointwiseDivide(w, x, y));
+}
+
+Petsc::Vec& Vec::AXPY(Scalar a, const Vec& x) {
+  PetscCallThrow(VecAXPY(data, a, x));
+  return *this;
+}
+
+Petsc::Vec& Vec::AYPX(Scalar a, const Vec& x) {
+  PetscCallThrow(VecAYPX(data, a, x));
+  return *this;
+}
+
+Petsc::Vec& Vec::AXPBY(Scalar a, Scalar b, const Vec& x) {
+  PetscCallThrow(VecAXPBY(data, a, b, x));
+  return *this;
+}
+
+Petsc::Vec& Vec::AXPBYPCZ(Scalar a, Scalar b, Scalar c, const Vec& x, const Vec& y) {
+  PetscCallThrow(VecAXPBYPCZ(data, a, b, c, x, y));
+  return *this;
+}
+
+Petsc::Vec& Vec::Scale(Scalar scalar) {
+  PetscCallThrow(VecScale(data, scalar));
+  return *this;
+}
+
+Scalar Vec::Dot(const Vec& y) {
+  Scalar result;
+  PetscCallThrow(VecDot(data, y, &result));
+  return result;
+}
+
+Scalar Vec::TDot(const Vec& y) {
+  Scalar result;
+  PetscCallThrow(VecTDot(data, y, &result));
+  return result;
+}
+
+Scalar Vec::Sum() {
+  Scalar result;
+  PetscCallThrow(VecSum(data, &result));
+  return result;
+}
+
+Real Vec::Norm(NormType type) {
+  Scalar result;
+  PetscCallThrow(VecNorm(data, type, &result));
+  return result;
+}
+
+std::pair<Int, Real> Vec::Max() const {
+  Int index;
+  Real result;
+  PetscCallThrow(VecMax(data, &index, &result));
+  return std::make_pair(index, result);
+}
+
+std::pair<Int, Real> Vec::Min() const {
+  Int index;
+  Real result;
+  PetscCallThrow(VecMin(data, &index, &result));
+  return std::make_pair(index, result);
+}
+
+void Vec::Abs() {
+  PetscCallThrow(VecAbs(data));
+}
+
+Real Vec::Normalize() {
+  Real result;
+  PetscCallThrow(VecNormalize(data, &result));
+  return result;
+}
+
+void Vec::Reciprocal() {
+  PetscCallThrow(VecReciprocal(data));
+}
+
+void Vec::Shift(Scalar scalar) {
+  PetscCallThrow(VecShift(data, scalar));
+}
+
 void Vec::Set(Scalar scalar) {
   PetscCallThrow(VecSet(data, scalar));
 }
