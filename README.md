@@ -20,8 +20,7 @@ If configure cannot automatically download the package, you can use a pre-downlo
 
 #### 2. Compiling and running `petsc-wrapper`
 
-Now, the executable can be built successfully. To do so, \
-run the following commands from the home directory:
+Now, the executable can be built successfully. To do so, run the following commands from the home directory:
 ```console
   make [-j]
 ```
