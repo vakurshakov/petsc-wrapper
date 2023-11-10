@@ -3,7 +3,7 @@
 
 #include <petscsys.h>
 
-#include "macros.h"
+#include "exception.h"
 
 namespace Petsc {
 

@@ -1,6 +1,7 @@
 #include <petscksp.h>
 
 #include "src/context.h"
+#include "src/exception.h"
 #include "src/vec.h"
 #include "src/mat.h"
 #include "src/ksp.h"
@@ -77,8 +78,13 @@ int main(int argc, char** argv) {
     Petsc::Int iterations = ksp.GetIterationNumber();
     PetscCall(PetscPrintf(PETSC_COMM_WORLD, "Norm of error %g, Iterations %" PetscInt_FMT "\n", (double)error_norm, iterations));
   }
-  catch (const std::exception& e) {
+  catch (const Petsc::Exception& e) {
     std::cerr << e.what() << std::endl;
+    MPI_Abort(PETSC_COMM_WORLD, (PetscMPIInt)e.code());
   }
-  return 0;
+  catch (...) {
+    std::cerr << "Unkown exception captured!" << std::endl;
+  }
+
+  return EXIT_SUCCESS;
 }

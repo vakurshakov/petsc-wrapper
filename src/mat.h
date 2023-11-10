@@ -6,7 +6,7 @@
 #include <petscmat.h>
 
 #include "context.h"
-#include "macros.h"
+#include "exception.h"
 #include "vec.h"
 
 namespace Petsc {

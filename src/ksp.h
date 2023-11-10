@@ -6,7 +6,7 @@
 #include <petscksp.h>
 
 #include "context.h"
-#include "macros.h"
+#include "exception.h"
 #include "vec.h"
 #include "mat.h"
 
