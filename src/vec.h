@@ -37,19 +37,19 @@ class Vec {
   Petsc::Vec& AYPX(Scalar a, const Vec& x);
   Petsc::Vec& AXPBY(Scalar a, Scalar b, const Vec& x);
   Petsc::Vec& AXPBYPCZ(Scalar a, Scalar b, Scalar c, const Vec& x, const Vec& y);
-  Petsc::Vec& Scale(Scalar a);
-  Scalar Dot(const Vec& y);
-  Scalar TDot(const Vec& y);
-  Scalar Sum();
-  Real Norm(NormType type);
-  Real Normalize();
+  Petsc::Vec& Set(Scalar scalar);
+  Petsc::Vec& Scale(Scalar scalar);
+  Petsc::Vec& Shift(Scalar scalar);
+  Petsc::Vec& Abs();
+  Petsc::Vec& Reciprocal();
+  Petsc::Vec& Normalize(Real* prevNorm2 = nullptr);
+
+  Scalar Dot(const Vec& y) const;
+  Scalar TDot(const Vec& y) const;
+  Scalar Sum() const;
+  Real Norm(NormType type) const;
   std::pair<Int, Real> Max() const;
   std::pair<Int, Real> Min() const;
-
-  void Abs();
-  void Reciprocal();
-  void Shift(Scalar scalar);
-  void Set(Scalar scalar);
 
   void SetValues(Int size, const Int idx[], const Scalar values[], InsertMode mode);
   void AssemblyBegin();

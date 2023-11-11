@@ -81,30 +81,55 @@ Petsc::Vec& Vec::AXPBYPCZ(Scalar a, Scalar b, Scalar c, const Vec& x, const Vec&
   return *this;
 }
 
+Petsc::Vec& Vec::Set(Scalar scalar) {
+  PetscCallThrow(VecSet(data, scalar));
+  return *this;
+}
+
 Petsc::Vec& Vec::Scale(Scalar scalar) {
   PetscCallThrow(VecScale(data, scalar));
   return *this;
 }
 
-Scalar Vec::Dot(const Vec& y) {
+Petsc::Vec& Vec::Shift(Scalar scalar) {
+  PetscCallThrow(VecShift(data, scalar));
+  return *this;
+}
+
+Petsc::Vec& Vec::Abs() {
+  PetscCallThrow(VecAbs(data));
+  return *this;
+}
+
+Petsc::Vec& Vec::Reciprocal() {
+  PetscCallThrow(VecReciprocal(data));
+  return *this;
+}
+
+Petsc::Vec& Vec::Normalize(Real* prevNorm2 = nullptr) {
+  PetscCallThrow(VecNormalize(data, prevNorm2));
+  return *this;
+}
+
+Scalar Vec::Dot(const Vec& y) const {
   Scalar result;
   PetscCallThrow(VecDot(data, y, &result));
   return result;
 }
 
-Scalar Vec::TDot(const Vec& y) {
+Scalar Vec::TDot(const Vec& y) const {
   Scalar result;
   PetscCallThrow(VecTDot(data, y, &result));
   return result;
 }
 
-Scalar Vec::Sum() {
+Scalar Vec::Sum() const {
   Scalar result;
   PetscCallThrow(VecSum(data, &result));
   return result;
 }
 
-Real Vec::Norm(NormType type) {
+Real Vec::Norm(NormType type) const {
   Scalar result;
   PetscCallThrow(VecNorm(data, type, &result));
   return result;
@@ -122,28 +147,6 @@ std::pair<Int, Real> Vec::Min() const {
   Real result;
   PetscCallThrow(VecMin(data, &index, &result));
   return std::make_pair(index, result);
-}
-
-void Vec::Abs() {
-  PetscCallThrow(VecAbs(data));
-}
-
-Real Vec::Normalize() {
-  Real result;
-  PetscCallThrow(VecNormalize(data, &result));
-  return result;
-}
-
-void Vec::Reciprocal() {
-  PetscCallThrow(VecReciprocal(data));
-}
-
-void Vec::Shift(Scalar scalar) {
-  PetscCallThrow(VecShift(data, scalar));
-}
-
-void Vec::Set(Scalar scalar) {
-  PetscCallThrow(VecSet(data, scalar));
 }
 
 Vec::iterator Vec::begin() {
