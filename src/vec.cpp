@@ -107,7 +107,7 @@ Petsc::Vec& Vec::Reciprocal() {
   return *this;
 }
 
-Petsc::Vec& Vec::Normalize(Real* prevNorm2 = nullptr) {
+Petsc::Vec& Vec::Normalize(Real* prevNorm2) {
   PetscCallThrow(VecNormalize(data, prevNorm2));
   return *this;
 }
