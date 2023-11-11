@@ -7,8 +7,9 @@
 
 namespace Petsc {
 
-using Real = PetscReal;
 using Int = PetscInt;
+using Bool = PetscBool;
+using Real = PetscReal;
 using Scalar = PetscScalar;
 
 class Context {

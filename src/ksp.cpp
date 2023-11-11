@@ -23,6 +23,10 @@ void KSP::SetTolerances(Real relativeTol, Real absoluteTol, Real divergenceTol, 
   PetscCallThrow(KSPSetTolerances(data, relativeTol, absoluteTol, divergenceTol, itNumber));
 }
 
+void KSP::SetInitialGuessNonzero(Bool flag) {
+  PetscCallThrow(KSPSetInitialGuessNonzero(data, flag));
+}
+
 void KSP::SetFromOptions() {
   PetscCallThrow(KSPSetFromOptions(data));
 }
@@ -35,6 +39,10 @@ void KSP::Solve(const Petsc::Vec& rhs, Petsc::Vec& solution) {
   PetscCallThrow(KSPSolve(data, rhs, solution));
 }
 
+void KSP::GetSolution(Petsc::Vec& solution) const {
+  PetscCallThrow(KSPGetSolution(data, solution));
+}
+
 void KSP::View(PetscViewer viewer) const {
   PetscCallThrow(KSPView(data, viewer));
 }
@@ -43,6 +51,12 @@ Int KSP::GetIterationNumber() const {
   Int iterations;
   PetscCallThrow(KSPGetIterationNumber(data, &iterations));
   return iterations;
+}
+
+const char* KSP::GetConvergedReason() const {
+  const char* reason;
+  PetscCallThrow(KSPGetConvergedReasonString(data, &reason));
+  return reason;
 }
 
 void KSP::Destroy() {
