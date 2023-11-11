@@ -1,7 +1,7 @@
 #ifndef SRC_VEC_H
 #define SRC_VEC_H
 
-#include <string>
+#include <string_view>
 
 #include <petscvec.h>
 

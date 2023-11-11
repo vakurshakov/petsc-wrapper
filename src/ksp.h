@@ -1,7 +1,7 @@
 #ifndef SRC_KSP_H
 #define SRC_KSP_H
 
-#include <string>
+#include <string_view>
 
 #include <petscksp.h>
 

@@ -1,7 +1,7 @@
 #ifndef SRC_MAT_H
 #define SRC_MAT_H
 
-#include <string>
+#include <string_view>
 
 #include <petscmat.h>
 
