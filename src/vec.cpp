@@ -2,9 +2,6 @@
 
 namespace Petsc {
 
-Vec::Vec(Int globalSize, std::string_view name)
-    : Vec(PETSC_DECIDE, globalSize, name) {}
-
 Vec::Vec(Int localSize, Int globalSize, std::string_view name) {
   PetscCallThrow(VecCreate(PETSC_COMM_WORLD, &data));
   PetscCallThrow(VecSetSizes(data, localSize, globalSize));
@@ -15,7 +12,11 @@ Vec::Vec(Int localSize, Int globalSize, std::string_view name) {
   }
 }
 
-/* static */ Vec Vec::FromOptions(Int globalSize, std::string_view name) {
+/* static */ Vec Vec::FromLocals(Int localSize, std::string_view name) {
+  return FromOptions(localSize, PETSC_DETERMINE, name);
+}
+
+/* static */ Vec Vec::FromGlobals(Int globalSize, std::string_view name) {
   return FromOptions(PETSC_DECIDE, globalSize, name);
 }
 

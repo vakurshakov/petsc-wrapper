@@ -14,11 +14,10 @@ namespace Petsc {
 class Mat {
  public:
   Mat() = default;
-
-  Mat(Int globalRows, Int globalCols, std::string_view name = {});
   Mat(Int localRows, Int localCols, Int globalRows, Int globalCols, std::string_view name = {});
 
-  static Mat FromOptions(Int globalRows, Int globalCols, std::string_view name = {});
+  static Mat FromLocals(Int localRows, Int localCols, std::string_view name = {});
+  static Mat FromGlobals(Int globalRows, Int globalCols, std::string_view name = {});
   static Mat FromOptions(Int localRows, Int localCols, Int globalRows, Int globalCols, std::string_view name = {});
 
   std::pair<Int, Int> GetSize() const;

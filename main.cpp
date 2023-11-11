@@ -14,7 +14,7 @@ int main(int argc, char** argv) {
 
     Petsc::Int globalSize = 500;
 
-    auto x = Petsc::Vec::FromOptions(globalSize, "Approximate solution");
+    auto x = Petsc::Vec::FromGlobals(globalSize, "Approximate solution");
     auto b = Petsc::Vec::Duplicate(x);
     auto u = Petsc::Vec::Duplicate(x);
 

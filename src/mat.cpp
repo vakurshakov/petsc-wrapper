@@ -2,9 +2,6 @@
 
 namespace Petsc {
 
-Mat::Mat(Int globalRows, Int globalCols, std::string_view name)
-  : Mat(PETSC_DECIDE, PETSC_DECIDE, globalRows, globalCols, name) {}
-
 Mat::Mat(Int localRows, Int localCols, Int globalRows, Int globalCols, std::string_view name) {
   PetscCallThrow(MatCreate(PETSC_COMM_WORLD, &data));
   PetscCallThrow(MatSetSizes(data, localRows, localCols, globalRows, globalCols));
@@ -15,7 +12,11 @@ Mat::Mat(Int localRows, Int localCols, Int globalRows, Int globalCols, std::stri
   }
 }
 
-/* static */ Mat Mat::FromOptions(Int globalRows, Int globalCols, std::string_view name) {
+/* static */ Mat Mat::FromLocals(Int localRows, Int localCols, std::string_view name) {
+  return FromOptions(localRows, localCols, PETSC_DETERMINE, PETSC_DETERMINE, name);
+}
+
+/* static */ Mat Mat::FromGlobals(Int globalRows, Int globalCols, std::string_view name) {
   return FromOptions(PETSC_DECIDE, PETSC_DECIDE, globalRows, globalCols, name);
 }
 
