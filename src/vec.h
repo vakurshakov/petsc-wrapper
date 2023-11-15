@@ -33,16 +33,16 @@ class Vec {
   static void PointwiseMult(Vec& w, const Vec& x, const Vec& y);
   static void PointwiseDivide(Vec& w, const Vec& x, const Vec& y);
 
-  Petsc::Vec& AXPY(Scalar a, const Vec& x);
-  Petsc::Vec& AYPX(Scalar a, const Vec& x);
-  Petsc::Vec& AXPBY(Scalar a, Scalar b, const Vec& x);
-  Petsc::Vec& AXPBYPCZ(Scalar a, Scalar b, Scalar c, const Vec& x, const Vec& y);
-  Petsc::Vec& Set(Scalar scalar);
-  Petsc::Vec& Scale(Scalar scalar);
-  Petsc::Vec& Shift(Scalar scalar);
-  Petsc::Vec& Abs();
-  Petsc::Vec& Reciprocal();
-  Petsc::Vec& Normalize(Real* prevNorm2 = nullptr);
+  Vec& AXPY(Scalar a, const Vec& x);
+  Vec& AYPX(Scalar a, const Vec& x);
+  Vec& AXPBY(Scalar a, Scalar b, const Vec& x);
+  Vec& AXPBYPCZ(Scalar a, Scalar b, Scalar c, const Vec& x, const Vec& y);
+  Vec& Set(Scalar scalar);
+  Vec& Scale(Scalar scalar);
+  Vec& Shift(Scalar scalar);
+  Vec& Abs();
+  Vec& Reciprocal();
+  Vec& Normalize(Real* prevNorm2 = nullptr);
 
   Scalar Dot(const Vec& y) const;
   Scalar TDot(const Vec& y) const;

@@ -73,11 +73,11 @@ void Mat::SetValues(
   PetscCallThrow(MatSetValues(data, rowsSize, rowsIdx, colsSize, colsIdx, values,  mode));
 }
 
-void Mat::AssemblyBegin(MatAssemblyType mode) {
+void Mat::AssemblyBegin(AssemblyType mode) {
   PetscCallThrow(MatAssemblyBegin(data, mode));
 }
 
-void Mat::AssemblyEnd(MatAssemblyType mode) {
+void Mat::AssemblyEnd(AssemblyType mode) {
   PetscCallThrow(MatAssemblyEnd(data, mode));
 }
 

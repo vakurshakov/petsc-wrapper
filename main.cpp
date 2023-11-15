@@ -74,9 +74,9 @@ int main(int argc, char** argv) {
     // Check the solution and clean up
     ksp.View(PETSC_VIEWER_STDOUT_WORLD);
 
-    const char* reason = ksp.GetConvergedReason();
-    Petsc::Int iterations = ksp.GetIterationNumber();
-    Petsc::Real error_norm = x.AXPY(-1.0, u).Norm(NORM_2);
+    auto reason = ksp.GetConvergedReason();
+    auto iterations = ksp.GetIterationNumber();
+    auto error_norm = x.AXPY(-1.0, u).Norm(NORM_2);
     PetscCall(PetscPrintf(PETSC_COMM_WORLD, "Converged reason: %s\n", reason));
     PetscCall(PetscPrintf(PETSC_COMM_WORLD, "Iterations: %" PetscInt_FMT "\n", iterations));
     PetscCall(PetscPrintf(PETSC_COMM_WORLD, "Norm of error: %g\n", (double)error_norm));

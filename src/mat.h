@@ -13,6 +13,8 @@ namespace Petsc {
 
 class Mat {
  public:
+  using AssemblyType = MatAssemblyType;
+
   Mat() = default;
   Mat(Int localRows, Int localCols, Int globalRows, Int globalCols, std::string_view name = {});
 
@@ -34,8 +36,8 @@ class Mat {
     PetscInt colsSize, const PetscInt colsIdx[],
     const PetscScalar values[], InsertMode mode);
 
-  void AssemblyBegin(MatAssemblyType mode);
-  void AssemblyEnd(MatAssemblyType mode);
+  void AssemblyBegin(AssemblyType mode);
+  void AssemblyEnd(AssemblyType mode);
 
   void Mult(const Petsc::Vec& in, Petsc::Vec& out) const;
 
@@ -43,9 +45,9 @@ class Mat {
   ~Mat() noexcept(false);
 
   /// @brief Conversion to PETSc matrix
-  operator _p_Mat*() { return data; }
+  operator _p_Mat*() const { return data; }
   operator _p_Mat**() { return &data; }
-  operator _p_PetscObject*() { return reinterpret_cast<PetscObject>(data); }
+  operator _p_PetscObject*() const { return reinterpret_cast<PetscObject>(data); }
   operator _p_PetscObject**() { return reinterpret_cast<PetscObject*>(&data); }
 
  private:
