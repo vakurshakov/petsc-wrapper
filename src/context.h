@@ -12,6 +12,13 @@
   T(T&& other) = default;                 \
   T& operator=(T&& other) = delete        \
 
+#define PETSC_NO_COPY_POLICY(T)           \
+  T(const T& other) = delete;             \
+  T& operator=(const T& other) = delete;  \
+  \
+  T(T&& other) = delete;                  \
+  T& operator=(T&& other) = delete        \
+
 
 namespace Petsc {
 
@@ -19,6 +26,11 @@ using Int = PetscInt;
 using Bool = PetscBool;
 using Real = PetscReal;
 using Scalar = PetscScalar;
+
+template<typename T> struct Two { T x; T y; };
+template<typename T> struct Three { T x; T y; T z; };
+
+using MPIInt = PetscMPIInt;
 
 class Context {
  public:

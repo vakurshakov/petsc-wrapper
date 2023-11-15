@@ -32,6 +32,8 @@ SRCS :=            \
 	src/vec.cpp      \
 	src/mat.cpp      \
 	src/ksp.cpp      \
+	src/dm.cpp       \
+	src/dmda.cpp     \
 
 
 OBJS := $(SRCS:%.cpp=$(OBJDIR)/%.o)
