@@ -19,6 +19,7 @@ class Vec {
  public:
   Vec() = default;
   Vec(Int localSize, Int globalSize, std::string_view name = {});
+  PETSC_DEFAULT_COPY_POLICY(Vec);
 
   static Vec FromLocals(Int localSize, std::string_view name = {});
   static Vec FromGlobals(Int globalSize, std::string_view name = {});

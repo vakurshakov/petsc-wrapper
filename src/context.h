@@ -5,6 +5,14 @@
 
 #include "exception.h"
 
+#define PETSC_DEFAULT_COPY_POLICY(T)      \
+  T(const T& other) = delete;             \
+  T& operator=(const T& other) = delete;  \
+  \
+  T(T&& other) = default;                 \
+  T& operator=(T&& other) = delete        \
+
+
 namespace Petsc {
 
 using Int = PetscInt;

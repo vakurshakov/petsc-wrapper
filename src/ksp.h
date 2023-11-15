@@ -15,6 +15,8 @@ namespace Petsc {
 class KSP {
  public:
   KSP(std::string_view name = {});
+  PETSC_DEFAULT_COPY_POLICY(KSP);
+
   static KSP FromOptions(std::string_view name = {});
 
   void SetOperators(Mat& linearOp, Mat& preconditionOp);

@@ -17,6 +17,7 @@ class Mat {
 
   Mat() = default;
   Mat(Int localRows, Int localCols, Int globalRows, Int globalCols, std::string_view name = {});
+  PETSC_DEFAULT_COPY_POLICY(Mat);
 
   static Mat FromLocals(Int localRows, Int localCols, std::string_view name = {});
   static Mat FromGlobals(Int globalRows, Int globalCols, std::string_view name = {});
