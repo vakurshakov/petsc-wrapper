@@ -32,15 +32,11 @@ class Mat {
 
   void ZeroEntries();
 
-  void SetValues(
-    PetscInt rowsSize, const PetscInt rowsIdx[],
-    PetscInt colsSize, const PetscInt colsIdx[],
-    const PetscScalar values[], InsertMode mode);
-
+  void SetValues(Int rowsSize, const Int rowsIdx[], Int colsSize, const Int colsIdx[], const Scalar values[], InsertMode mode);
   void AssemblyBegin(AssemblyType mode);
   void AssemblyEnd(AssemblyType mode);
 
-  void Mult(const Petsc::Vec& in, Petsc::Vec& out) const;
+  void Mult(const Vec& in, Vec& out) const;
 
   void Destroy();
   ~Mat() noexcept(false);

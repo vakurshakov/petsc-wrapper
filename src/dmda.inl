@@ -3,12 +3,12 @@
 namespace Petsc {
 
 template<typename T>
-DA::Borrowed<T> DA::BorrowArray(Vec& vec, ArrayType type) {
+DA::Borrowed<T> DA::GetArray(Vec& vec, GetArrayType type) {
   return Borrowed<T>(*this, vec, type);
 }
 
 template<typename T>
-DA::Borrowed<T>::Borrowed(DA& da, Vec& vec, DA::ArrayType type)
+DA::Borrowed<T>::Borrowed(DA& da, Vec& vec, GetArrayType type)
     : da(da), vec(vec), type(type) {
   switch (type) {
     case READ: PetscCallThrow(DMDAVecGetArrayRead(da, vec, (void*)&array)); return;

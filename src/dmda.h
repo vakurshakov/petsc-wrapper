@@ -39,22 +39,14 @@ class DA : public DM {
   void SetCoordinateName(Int nf, const char* name);
   const char* GetCoordinateName(Int nf) const;
 
-  enum ArrayType {
-    DEFAULT = 0,
-    READ,
-    WRITE,
-    DOF,
-    DOF_READ,
-    DOF_WRITE
-  };
   template<typename T> class Borrowed;
-  template<typename T> Borrowed<T> BorrowArray(Vec& vec, ArrayType type = DEFAULT);
+  template<typename T> Borrowed<T> GetArray(Vec& vec, GetArrayType type = DEFAULT);
 };
 
 template<typename T>
 class DA::Borrowed {
  public:
-  Borrowed(DA& da, Vec& vec, DA::ArrayType type);
+  Borrowed(DA& da, Vec& vec, GetArrayType type);
   ~Borrowed() noexcept(false);
   PETSC_NO_COPY_POLICY(Borrowed);
 
@@ -64,7 +56,7 @@ class DA::Borrowed {
  private:
   DA& da;
   Vec& vec;
-  DA::ArrayType type;
+  GetArrayType type;
 
   T array;
 };

@@ -66,10 +66,7 @@ void Mat::ZeroEntries() {
   PetscCallThrow(MatZeroEntries(data));
 }
 
-void Mat::SetValues(
-    PetscInt rowsSize, const PetscInt rowsIdx[],
-    PetscInt colsSize, const PetscInt colsIdx[],
-    const PetscScalar values[], InsertMode mode) {
+void Mat::SetValues(PetscInt rowsSize, const PetscInt rowsIdx[], PetscInt colsSize, const PetscInt colsIdx[], const PetscScalar values[], InsertMode mode) {
   PetscCallThrow(MatSetValues(data, rowsSize, rowsIdx, colsSize, colsIdx, values,  mode));
 }
 

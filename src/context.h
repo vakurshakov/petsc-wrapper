@@ -26,11 +26,20 @@ using Int = PetscInt;
 using Bool = PetscBool;
 using Real = PetscReal;
 using Scalar = PetscScalar;
+using MPIInt = PetscMPIInt;
 
 template<typename T> struct Two { T x; T y; };
 template<typename T> struct Three { T x; T y; T z; };
 
-using MPIInt = PetscMPIInt;
+enum GetArrayType {
+  DEFAULT = 0,
+  READ,
+  WRITE,
+  DOF,
+  DOF_READ,
+  DOF_WRITE
+};
+
 
 class Context {
  public:
