@@ -18,6 +18,10 @@ class DA : public DM {
   PETSC_DEFAULT_COPY_POLICY(DA);
 
   static DA Create();
+  static DA Create1d(BoundaryType boundary, StencilType type, Int global, Int procs, Int dof, Int s, const Int* ranges);
+  static DA Create2d(Two<BoundaryType> boundary, StencilType type, Two<Int> global, Two<Int> procs, Int dof, Int s, Two<const Int*> ranges);
+  static DA Create3d(Three<BoundaryType> boundary, StencilType type, Three<Int> global, Three<Int> procs, Int dof, Int s, Three<const Int*> ranges);
+
   void SetSizes(Three<Int> global);
   void SetNumProcs(Three<Int> procs);
   void SetBoundaryType(Three<BoundaryType> type);
@@ -25,9 +29,6 @@ class DA : public DM {
   void SetStencilType(StencilType type);
   void SetStencilWidth(Int width);
   void SetOwnershipRanges(Three<const Int*> ranges);
-
-  static DA Create(Three<BoundaryType> boundary, StencilType type,
-    Three<Int> global, Three<Int> procs, Int dof, Int s, Three<const Int*> ranges);
 
   void GetCorners(Three<Int*> corner, Three<Int*> size) const;
   void GetGhostCorners(Three<Int*> corner, Three<Int*> size) const;
