@@ -1,4 +1,5 @@
 *.out
+ex[0-9]
 
 bin/
 bin-int/

@@ -1,4 +1,4 @@
-CXX    := mpicxx
+CXX := mpicxx
 CFLAGS := -std=c++20 -fPIC -fopenmp -pthread
 
 # `filter X, A B` return those of A, B that are equal to X
@@ -12,22 +12,19 @@ CFLAGS += -O3
 PETSC_ARCH := linux-mpi-opt
 endif
 
-PETSC_DIR  := $(PWD)/external/petsc
+DIR := $(realpath $(dir $(abspath $(lastword $(MAKEFILE_LIST)))))
+PETSC_DIR := $(DIR)/external/petsc
 
-INC_PATH := -I$(PWD)/src
+INC_PATH := -I$(DIR)/src
 INC_PATH += -I$(PETSC_DIR)/include -I$(PETSC_DIR)/$(PETSC_ARCH)/include
 
 LIB_PATH := -L$(PETSC_DIR)/$(PETSC_ARCH)/lib
 
 LIBS := -Wl,-rpath=$(PETSC_DIR)/$(PETSC_ARCH)/lib -lpetsc
 
-EXECUTABLE := a.out
-
-RESDIR := ./
-OBJDIR := ./bin-int
+OBJDIR := bin-int
 
 SRCS :=            \
-	main.cpp         \
 	src/context.cpp  \
 	src/vec.cpp      \
 	src/mat.cpp      \
@@ -35,21 +32,17 @@ SRCS :=            \
 	src/dm.cpp       \
 	src/dmda.cpp     \
 
-
 OBJS := $(SRCS:%.cpp=$(OBJDIR)/%.o)
 DEPS := $(SRCS:%.cpp=$(OBJDIR)/%.d)
 
-all: $(RESDIR)/$(EXECUTABLE)
+all: prepare_binaries
 
 -include $(DEPS)
 
 # creates a directory for the target if it doesn't exist
 MKDIR=@mkdir -p $(@D)
 
-$(RESDIR)/$(EXECUTABLE): $(OBJS)
-	@echo -e "\033[0;33m\nCreating the resulting binary.\033[0m"
-	$(MKDIR)
-	$(CXX) $(CFLAGS) $(LIB_PATH) $^ $(LIBS) -o $@
+prepare_binaries: $(OBJS)
 
 $(OBJDIR)/%.o: %.cpp message_compiling
 	$(MKDIR)
@@ -61,9 +54,9 @@ $(OBJDIR)/%.d: %.cpp
 
 .PHONY: clean
 clean:
-	@rm $(DEPS) $(OBJS) $(RESDIR)/$(EXECUTABLE)
+	@rm $(DEPS) $(OBJS)
 
 # to prevent multiple messages
 .INTERMEDIATE: message_compiling
 message_compiling:
-	@echo -e "\033[0;33m\nCompiling other files from src/**.\033[0m"
+	@echo -e "\033[0;33mCompiling files from src/**.\033[0m"

@@ -1,18 +1,18 @@
 #include <petscksp.h>
 
-#include "src/context.h"
-#include "src/exception.h"
-#include "src/vec.h"
-#include "src/mat.h"
-#include "src/ksp.h"
-
-#include <iostream>
+#include <context.h>
+#include <exception.h>
+#include <vec.h>
+#include <mat.h>
+#include <ksp.h>
 
 int main(int argc, char** argv) {
-  try {
-    Petsc::Context::Instance(&argc, &argv);
+  using namespace Petsc;
 
-    Petsc::Int globalSize = 500;
+  try {
+    Context::Instance(&argc, &argv);
+
+    Int globalSize = 500;
 
     auto x = Petsc::Vec::FromGlobals(globalSize, "Approximate solution");
     auto b = Petsc::Vec::Duplicate(x);
@@ -25,9 +25,9 @@ int main(int argc, char** argv) {
 
     // Stencil laplace operator
     {
-      Petsc::Int i;
-      Petsc::Int col[3];
-      Petsc::Scalar value[3];
+      Int i;
+      Int col[3];
+      Scalar value[3];
 
       if (!localStart) {
         localStart = 1;
@@ -82,11 +82,11 @@ int main(int argc, char** argv) {
     PetscCall(PetscPrintf(PETSC_COMM_WORLD, "Norm of error: %g\n", (double)error_norm));
   }
   catch (const Petsc::Exception& e) {
-    std::cerr << e.what() << std::endl;
-    MPI_Abort(PETSC_COMM_WORLD, (PetscMPIInt)e.code());
+    PetscCall(PetscPrintf(PETSC_COMM_WORLD, e.what()));
+    PetscCallMPI(MPI_Abort(PETSC_COMM_WORLD, (MPIInt)e.code()));
   }
   catch (...) {
-    std::cerr << "Unkown exception captured!" << std::endl;
+    PetscCall(PetscPrintf(PETSC_COMM_WORLD, "Unkown exception captured!"));
   }
 
   return EXIT_SUCCESS;
