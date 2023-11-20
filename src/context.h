@@ -29,7 +29,14 @@ using Scalar = PetscScalar;
 using MPIInt = PetscMPIInt;
 
 template<typename T> struct Two { T x; T y; };
+using Int2 = Two<Int>;
+using Real2 = Two<Real>;
+using Scalar2 = Two<Scalar>;
+
 template<typename T> struct Three { T x; T y; T z; };
+using Int3 = Three<Int>;
+using Real3 = Three<Real>;
+using Scalar3 = Three<Scalar>;
 
 enum GetArrayType {
   DEFAULT = 0,

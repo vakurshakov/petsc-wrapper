@@ -19,19 +19,19 @@ class DA : public DM {
 
   static DA Create();
   static DA Create1d(BoundaryType boundary, StencilType type, Int global, Int procs, Int dof, Int s, const Int* ranges);
-  static DA Create2d(Two<BoundaryType> boundary, StencilType type, Two<Int> global, Two<Int> procs, Int dof, Int s, Two<const Int*> ranges);
-  static DA Create3d(Three<BoundaryType> boundary, StencilType type, Three<Int> global, Three<Int> procs, Int dof, Int s, Three<const Int*> ranges);
+  static DA Create2d(Two<BoundaryType> boundary, StencilType type, Int2 global, Int2 procs, Int dof, Int s, Two<const Int*> ranges);
+  static DA Create3d(Three<BoundaryType> boundary, StencilType type, Int3 global, Int3 procs, Int dof, Int s, Three<const Int*> ranges);
 
-  void SetSizes(Three<Int> global);
-  void SetNumProcs(Three<Int> procs);
+  void SetSizes(Int3 global);
+  void SetNumProcs(Int3 procs);
   void SetBoundaryType(Three<BoundaryType> type);
   void SetDof(Int dof);
   void SetStencilType(StencilType type);
   void SetStencilWidth(Int width);
   void SetOwnershipRanges(Three<const Int*> ranges);
 
-  void GetCorners(Three<Int*> corner, Three<Int*> size) const;
-  void GetGhostCorners(Three<Int*> corner, Three<Int*> size) const;
+  std::pair<Int3, Int3> GetCorners() const;
+  std::pair<Int3, Int3> GetGhostCorners() const;
 
   void SetFieldName(Int nf, const char* name);
   const char* GetFieldName(Int nf) const;

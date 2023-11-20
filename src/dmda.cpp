@@ -26,18 +26,18 @@ DA::DA(std::string_view name) : DM(name) {
   return da;
 }
 
-/* static */ DA DA::Create3d(Three<BoundaryType> boundary, StencilType type, Three<Int> global, Three<Int> procs, Int dof, Int s, Three<const Int*> ranges) {
+/* static */ DA DA::Create3d(Three<BoundaryType> boundary, StencilType type, Int3 global, Int3 procs, Int dof, Int s, Three<const Int*> ranges) {
   DA da;
   PetscCallThrow(DMDACreate3d(PETSC_COMM_WORLD,
     boundary.x, boundary.y, boundary.z, type, global.x, global.y, global.z, procs.x, procs.y, procs.z, dof, s, ranges.x, ranges.y, ranges.z, da));
   return da;
 }
 
-void DA::SetSizes(Three<Int> global) {
+void DA::SetSizes(Int3 global) {
   PetscCallThrow(DMDASetSizes(data, global.x, global.y, global.z));
 }
 
-void DA::SetNumProcs(Three<Int> procs) {
+void DA::SetNumProcs(Int3 procs) {
   PetscCallThrow(DMDASetNumProcs(data, procs.x, procs.y, procs.z));
 }
 
@@ -61,12 +61,16 @@ void DA::SetOwnershipRanges(Three<const Int*> ranges) {
   PetscCallThrow(DMDASetOwnershipRanges(data, ranges.x, ranges.y, ranges.z));
 }
 
-void DA::GetCorners(Three<Int*> corner, Three<Int*> size) const {
-  PetscCallThrow(DMDAGetCorners(data, corner.x, corner.y, corner.z, size.x, size.y, size.z));
+std::pair<Int3, Int3> DA::GetCorners() const {
+  Int3 corner, size;
+  PetscCallThrow(DMDAGetCorners(data, &corner.x, &corner.y, &corner.z, &size.x, &size.y, &size.z));
+  return std::make_pair(corner, size);
 }
 
-void DA::GetGhostCorners(Three<Int*> corner, Three<Int*> size) const {
-  PetscCallThrow(DMDAGetGhostCorners(data, corner.x, corner.y, corner.z, size.x, size.y, size.z));
+std::pair<Int3, Int3> DA::GetGhostCorners() const {
+  Int3 corner, size;
+  PetscCallThrow(DMDAGetGhostCorners(data, &corner.x, &corner.y, &corner.z, &size.x, &size.y, &size.z));
+  return std::make_pair(corner, size);
 }
 
 void DA::SetFieldName(Int nf, const char* name) {
