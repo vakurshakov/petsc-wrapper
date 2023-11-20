@@ -7,8 +7,7 @@
         {
             "name": "Linux",
             "includePath": [
-                "${default}",
-                "${workspaceFolder}/**",
+                "${workspaceFolder}/src/**",
                 "${workspaceFolder}/${PETSC_DIR}/include/**",
                 "${workspaceFolder}/${PETSC_DIR}/${PETSC_ARCH}/include/**"
             ],
