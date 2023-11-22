@@ -4,7 +4,7 @@ namespace Petsc {
 
 template<bool isConst>
 Vec::BasicBorrowedArray<isConst>::BasicBorrowedArray(VecRef vec, GetArrayType type)
-    : vec(vec), type(type), array(nullptr) {
+    : vec(vec), type(type) {
   if constexpr (isConst) {
     PetscCallThrow(VecGetArrayRead(vec, &array));
   }
@@ -17,7 +17,7 @@ Vec::BasicBorrowedArray<isConst>::BasicBorrowedArray(VecRef vec, GetArrayType ty
 }
 
 template<bool isConst>
-Vec::BasicBorrowedArray<isConst>::~BasicBorrowedArray() noexcept(false) {
+void Vec::BasicBorrowedArray<isConst>::Restore() {
   if constexpr (isConst) {
     PetscCallThrow(VecRestoreArrayRead(vec, &array));
   }
@@ -28,5 +28,85 @@ Vec::BasicBorrowedArray<isConst>::~BasicBorrowedArray() noexcept(false) {
     PetscCallThrow(VecRestoreArray(vec, &array));
   }
 }
+
+template<bool isConst>
+Vec::BasicBorrowedArray<isConst>::Iterator
+Vec::BasicBorrowedArray<isConst>::begin() {
+  return Iterator(*this, 0);
+}
+
+template<bool isConst>
+Vec::BasicBorrowedArray<isConst>::Iterator
+Vec::BasicBorrowedArray<isConst>::end() {
+  Int localSize = vec.LocalSize();
+  return Iterator(*this, localSize);
+}
+
+template<bool isConst>
+Vec::BasicBorrowedArray<isConst>::ConstIterator
+Vec::BasicBorrowedArray<isConst>::begin() const {
+  return ConstIterator(*this, 0);
+}
+
+template<bool isConst>
+Vec::BasicBorrowedArray<isConst>::ConstIterator
+Vec::BasicBorrowedArray<isConst>::end() const {
+  Int localSize = vec.LocalSize();
+  return ConstIterator(*this, localSize);
+}
+
+template<bool isConst>
+Vec::BasicBorrowedArray<isConst>::~BasicBorrowedArray() noexcept(false) {
+  Restore();
+}
+
+template<bool arrConst>
+template<bool iterConst>
+Vec::BasicBorrowedArray<arrConst>::BasicIterator<iterConst>::
+BasicIterator(Vec::BasicBorrowedArray<arrConst>& array, Int current)
+  : array(array), current(current) {}
+
+template<bool arrConst>
+template<bool iterConst>
+Vec::BasicBorrowedArray<arrConst>::BasicIterator<iterConst>::Reference
+Vec::BasicBorrowedArray<arrConst>::BasicIterator<iterConst>::operator*() {
+  return array[current];
+}
+
+template<bool arrConst>
+template<bool iterConst>
+Vec::BasicBorrowedArray<arrConst>::BasicIterator<iterConst>::Pointer
+Vec::BasicBorrowedArray<arrConst>::BasicIterator<iterConst>::operator->() {
+  return &array[current];
+}
+
+template<bool arrConst>
+template<bool iterConst>
+Vec::BasicBorrowedArray<arrConst>::BasicIterator<iterConst>&
+Vec::BasicBorrowedArray<arrConst>::BasicIterator<iterConst>::operator++() {
+  current++;
+  return *this;
+}
+
+template<bool arrConst>
+template<bool iterConst>
+bool Vec::BasicBorrowedArray<arrConst>::BasicIterator<iterConst>::operator!=(const BasicIterator& other) const {
+  return current != other.current;
+}
+
+template<bool arrConst>
+template<bool iterConst>
+Vec::BasicBorrowedArray<arrConst>::BasicIterator<iterConst>&
+Vec::BasicBorrowedArray<arrConst>::BasicIterator<iterConst>::operator+=(Int difference) {
+  current += difference;
+  return *this;
+}
+
+template<bool arrConst>
+template<bool iterConst>
+Int Vec::BasicBorrowedArray<arrConst>::BasicIterator<iterConst>::operator-(const BasicIterator& other) const {
+  return current - other.current;
+}
+
 
 }

@@ -83,18 +83,25 @@ template<bool isConst>
 class Vec::BasicBorrowedArray {
   using VecRef = std::conditional_t<isConst, const Vec&, Vec&>;
   using ArrayPointer = std::conditional_t<isConst, const Scalar*, Scalar*>;
+  template<bool iterConst> class BasicIterator;
 
  public:
   BasicBorrowedArray(VecRef vec, GetArrayType type);
-  ~BasicBorrowedArray() noexcept(false);
   PETSC_NO_COPY_POLICY(BasicBorrowedArray);
+
+  void Restore();
+  ~BasicBorrowedArray() noexcept(false);
 
   operator const Scalar*() const { return array; }
   operator ArrayPointer() { return array; }
 
-  // class iterator;
-  // iterator begin();
-  // iterator end();
+  using Iterator = BasicIterator<isConst>;
+  Iterator begin();
+  Iterator end();
+
+  using ConstIterator = BasicIterator<true>;
+  ConstIterator begin() const;
+  ConstIterator end() const;
 
  private:
   VecRef vec;
@@ -103,27 +110,31 @@ class Vec::BasicBorrowedArray {
   ArrayPointer array;
 };
 
-/*
-class Vec::BorrowedArray::iterator {
+
+template<bool arrConst>
+template<bool iterConst>
+class Vec::BasicBorrowedArray<arrConst>::BasicIterator {
  public:
-  iterator(Vec::BorrowedArray& array, Int current);
-  ~iterator() = default;
+  using Reference = std::conditional_t<arrConst || iterConst, const Scalar&, Scalar&>;
+  using Pointer = std::conditional_t<arrConst || iterConst, const Scalar*, Scalar*>;
+
+  BasicIterator(Vec::BasicBorrowedArray<arrConst>& array, Int current);
+  ~BasicIterator() = default;
 
   // Input iterator requirements
-  Scalar& operator*();
-  Scalar* operator->();
-  iterator& operator++();
-  bool operator!=(const iterator& other) const;
+  Reference operator*();
+  Pointer operator->();
+  BasicIterator& operator++();
+  bool operator!=(const BasicIterator& other) const;
 
   // Random access iterator requirements for OpenMP
-  iterator& operator+=(Int difference);
-  Int operator-(const iterator& other) const;
+  BasicIterator& operator+=(Int difference);
+  Int operator-(const BasicIterator& other) const;
 
  private:
-  Vec::BorrowedArray& array;
+  Vec::BasicBorrowedArray<arrConst>& array;
   Int current;
 };
-*/
 
 }
 

@@ -187,53 +187,11 @@ Vec::ConstBorrowedArray Vec::GetArrayRead() const {
 void Vec::Destroy() {
   if (data) {
     PetscCallThrow(VecDestroy(&data));
-    data = nullptr;
   }
 }
 
 Vec::~Vec() noexcept(false) {
   Destroy();
 }
-
-/*
-Vec::BorrowedArray::iterator Vec::BorrowedArray::begin() {
-  return Vec::BorrowedArray::iterator(*this, 0);
-}
-
-Vec::BorrowedArray::iterator Vec::BorrowedArray::end() {
-  Int localSize = vec.LocalSize();
-  return Vec::BorrowedArray::iterator(*this, localSize);
-}
-
-
-Vec::BorrowedArray::iterator::iterator(Vec::BorrowedArray& array, Int current)
-  : array(array), current(current) {}
-
-Scalar& Vec::BorrowedArray::iterator::operator*() {
-  return array[current];
-}
-
-Scalar* Vec::BorrowedArray::iterator::operator->() {
-  return &array[current];
-}
-
-Vec::BorrowedArray::iterator& Vec::BorrowedArray::iterator::operator++() {
-  current++;
-  return *this;
-}
-
-bool Vec::BorrowedArray::iterator::operator!=(const iterator& other) const {
-  return current != other.current;
-}
-
-Vec::BorrowedArray::iterator& Vec::BorrowedArray::iterator::operator+=(Int difference) {
-  current += difference;
-  return *this;
-}
-
-Int Vec::BorrowedArray::iterator::operator-(const iterator& other) const {
-  return current - other.current;
-}
-*/
 
 }
