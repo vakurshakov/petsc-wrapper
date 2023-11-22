@@ -22,7 +22,13 @@ Vec::Vec(Int localSize, Int globalSize, std::string_view name) {
 
 /* static */ Vec Vec::FromOptions(Int localSize, Int globalSize, std::string_view name) {
   Vec vec(localSize, globalSize, name);
-  PetscCallThrow(VecSetFromOptions(vec.data));
+  PetscCallThrow(VecSetFromOptions(vec));
+  return vec;
+}
+
+Vec Vec::Duplicate() const {
+  Vec vec;
+  PetscCallThrow(VecDuplicate(data, vec));
   return vec;
 }
 

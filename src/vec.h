@@ -24,7 +24,8 @@ class Vec {
   static Vec FromLocals(Int localSize, std::string_view name = {});
   static Vec FromGlobals(Int globalSize, std::string_view name = {});
   static Vec FromOptions(Int localSize, Int globalSize, std::string_view name = {});
-  static Vec Duplicate(const Vec& other);
+
+  Vec Duplicate() const;
 
   Int Size() const;
   Int LocalSize() const;

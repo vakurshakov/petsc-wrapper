@@ -15,8 +15,8 @@ int main(int argc, char** argv) {
     Int globalSize = 500;
 
     auto x = Petsc::Vec::FromGlobals(globalSize, "Approximate solution");
-    auto b = Petsc::Vec::Duplicate(x);
-    auto u = Petsc::Vec::Duplicate(x);
+    auto b = x.Duplicate();
+    auto u = x.Duplicate();
 
     auto [localStart, localEnd] = x.GetOwnershipRange();
     auto localSize = x.LocalSize();
