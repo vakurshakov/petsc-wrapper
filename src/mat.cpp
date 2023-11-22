@@ -82,6 +82,10 @@ void Mat::Mult(const Petsc::Vec& in, Petsc::Vec& out) const {
   PetscCallThrow(MatMult(data, in, out));
 }
 
+void Mat::View(PetscViewer viewer) const {
+  PetscCallThrow(MatView(data, viewer));
+}
+
 void Mat::Destroy() {
   if (data) {
     PetscCallThrow(MatDestroy(&data));

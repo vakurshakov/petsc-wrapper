@@ -184,6 +184,10 @@ Vec::ConstBorrowedArray Vec::GetArrayRead() const {
   return ConstBorrowedArray(*this, Read);
 }
 
+void Vec::View(PetscViewer viewer) const {
+  PetscCallThrow(VecView(data, viewer));
+}
+
 void Vec::Destroy() {
   if (data) {
     PetscCallThrow(VecDestroy(&data));

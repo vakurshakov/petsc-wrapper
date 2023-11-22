@@ -39,6 +39,8 @@ class Mat {
 
   void Mult(const Vec& in, Vec& out) const;
 
+  void View(PetscViewer viewer) const;
+
   void Destroy();
   ~Mat() noexcept(false);
 

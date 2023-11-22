@@ -65,6 +65,8 @@ class Vec {
   ConstBorrowedArray GetArray() const;
   ConstBorrowedArray GetArrayRead() const;
 
+  void View(PetscViewer viewer) const;
+
   void Destroy();
   ~Vec() noexcept(false);
 
