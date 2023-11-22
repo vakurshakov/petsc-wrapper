@@ -39,12 +39,12 @@ using Real3 = Three<Real>;
 using Scalar3 = Three<Scalar>;
 
 enum GetArrayType {
-  DEFAULT = 0,
-  READ,
-  WRITE,
+  Default = 0,
+  Read,
+  Write,
   DOF,
-  DOF_READ,
-  DOF_WRITE
+  DOF_Read,
+  DOF_Write
 };
 
 

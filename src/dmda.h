@@ -40,8 +40,9 @@ class DA : public DM {
   void SetCoordinateName(Int nf, const char* name);
   const char* GetCoordinateName(Int nf) const;
 
+  /// @todo guard type T with std::enable_if, T should be pointer * dim
   template<typename T> class Borrowed;
-  template<typename T> Borrowed<T> GetArray(Vec& vec, GetArrayType type = DEFAULT);
+  template<typename T> Borrowed<T> GetArray(Vec& vec, GetArrayType type = Default);
 };
 
 template<typename T>

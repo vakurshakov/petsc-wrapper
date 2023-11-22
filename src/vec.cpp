@@ -32,9 +32,10 @@ Vec Vec::Duplicate() const {
   return vec;
 }
 
-/* static */ Vec Vec::Duplicate(const Vec& other) {
+Vec Vec::Copy() const {
   Vec vec;
-  PetscCallThrow(VecDuplicate(other.data, &vec.data));
+  PetscCallThrow(VecDuplicate(data, vec));
+  PetscCallThrow(VecCopy(data, vec));
   return vec;
 }
 
@@ -156,15 +157,6 @@ std::pair<Int, Real> Vec::Min() const {
   return std::make_pair(index, result);
 }
 
-Vec::iterator Vec::begin() {
-  return iterator(*this, 0);
-}
-
-Vec::iterator Vec::end() {
-  Int localSize = LocalSize();
-  return iterator(*this, localSize);
-}
-
 void Vec::SetValues(Int size, const Int idx[], const Scalar values[], InsertMode mode) {
   PetscCallThrow(VecSetValues(data, size, idx, values, mode));
 }
@@ -177,26 +169,20 @@ void Vec::AssemblyEnd() {
   PetscCallThrow(VecAssemblyEnd(data));
 }
 
-Scalar* Vec::GetArray() {
-  Scalar* array = nullptr;
-  PetscCallThrow(VecGetArray(data, &array));
-  return array;
+Vec::BorrowedArray Vec::GetArray(GetArrayType type) {
+  if (!(type == Default || type == Write)) {
+    PetscCallThrow(PETSC_ERR_ARG_WRONG);
+  }
+  return BorrowedArray(*this, type);
 }
 
-const Scalar* Vec::GetArrayRead() const {
-  const Scalar* array = nullptr;
-  PetscCallThrow(VecGetArrayRead(data, &array));
-  return array;
+Vec::ConstBorrowedArray Vec::GetArray() const {
+  return ConstBorrowedArray(*this, Read);
 }
 
-void Vec::RestoreArray(Scalar array[]) {
-  PetscCallThrow(VecRestoreArray(data, &array));
+Vec::ConstBorrowedArray Vec::GetArrayRead() const {
+  return ConstBorrowedArray(*this, Read);
 }
-
-void Vec::RestoreArray(const Scalar array[]) const {
-  PetscCallThrow(VecRestoreArrayRead(data, &array));
-}
-
 
 void Vec::Destroy() {
   if (data) {
@@ -209,40 +195,45 @@ Vec::~Vec() noexcept(false) {
   Destroy();
 }
 
-
-Vec::iterator::iterator(Vec& vec, Int current)
-    : vec(vec), current(current) {
-  PetscCallThrow(VecGetArray(vec, &array));
+/*
+Vec::BorrowedArray::iterator Vec::BorrowedArray::begin() {
+  return Vec::BorrowedArray::iterator(*this, 0);
 }
 
-Vec::iterator::~iterator() noexcept(false) {
-  PetscCallThrow(VecRestoreArray(vec, &array));
+Vec::BorrowedArray::iterator Vec::BorrowedArray::end() {
+  Int localSize = vec.LocalSize();
+  return Vec::BorrowedArray::iterator(*this, localSize);
 }
 
-Scalar& Vec::iterator::operator*() {
+
+Vec::BorrowedArray::iterator::iterator(Vec::BorrowedArray& array, Int current)
+  : array(array), current(current) {}
+
+Scalar& Vec::BorrowedArray::iterator::operator*() {
   return array[current];
 }
 
-Scalar* Vec::iterator::operator->() {
+Scalar* Vec::BorrowedArray::iterator::operator->() {
   return &array[current];
 }
 
-Vec::iterator& Vec::iterator::operator++() {
+Vec::BorrowedArray::iterator& Vec::BorrowedArray::iterator::operator++() {
   current++;
   return *this;
 }
 
-bool Vec::iterator::operator!=(const iterator& other) const {
+bool Vec::BorrowedArray::iterator::operator!=(const iterator& other) const {
   return current != other.current;
 }
 
-Vec::iterator& Vec::iterator::operator+=(Int difference) {
+Vec::BorrowedArray::iterator& Vec::BorrowedArray::iterator::operator+=(Int difference) {
   current += difference;
   return *this;
 }
 
-Int Vec::iterator::operator-(const iterator& other) const {
+Int Vec::BorrowedArray::iterator::operator-(const iterator& other) const {
   return current - other.current;
 }
+*/
 
 }

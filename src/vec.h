@@ -11,11 +11,14 @@
 namespace Petsc {
 
 /// @todo Create indexes<T> to reduce the need in array size.
-/// @todo Create [const_]view<T> for objects that should be restored after usage.
 /// @todo Implement Vec::iterator::value(), Vec::iterator::index() methods.
 /// @note Is it important that views should be restored before next gather/scatter?
 
 class Vec {
+  template<bool isConst> class BasicBorrowedArray;
+  using BorrowedArray = BasicBorrowedArray<false>;
+  using ConstBorrowedArray = BasicBorrowedArray<true>;
+
  public:
   Vec() = default;
   Vec(Int localSize, Int globalSize, std::string_view name = {});
@@ -26,6 +29,7 @@ class Vec {
   static Vec FromOptions(Int localSize, Int globalSize, std::string_view name = {});
 
   Vec Duplicate() const;
+  Vec Copy() const;
 
   Int Size() const;
   Int LocalSize() const;
@@ -57,14 +61,9 @@ class Vec {
   void AssemblyBegin();
   void AssemblyEnd();
 
-  class iterator;
-  iterator begin();
-  iterator end();
-
-  Scalar* GetArray();
-  const Scalar* GetArrayRead() const;
-  void RestoreArray(Scalar array[]);
-  void RestoreArray(const Scalar array[]) const;
+  BorrowedArray GetArray(GetArrayType type = Default);
+  ConstBorrowedArray GetArray() const;
+  ConstBorrowedArray GetArrayRead() const;
 
   void Destroy();
   ~Vec() noexcept(false);
@@ -80,10 +79,35 @@ class Vec {
 };
 
 
-class Vec::iterator {
+template<bool isConst>
+class Vec::BasicBorrowedArray {
+  using VecRef = std::conditional_t<isConst, const Vec&, Vec&>;
+  using ArrayPointer = std::conditional_t<isConst, const Scalar*, Scalar*>;
+
  public:
-  iterator(Petsc::Vec& vec, Int current);
-  ~iterator() noexcept(false);
+  BasicBorrowedArray(VecRef vec, GetArrayType type);
+  ~BasicBorrowedArray() noexcept(false);
+  PETSC_NO_COPY_POLICY(BasicBorrowedArray);
+
+  operator const Scalar*() const { return array; }
+  operator ArrayPointer() { return array; }
+
+  // class iterator;
+  // iterator begin();
+  // iterator end();
+
+ private:
+  VecRef vec;
+  GetArrayType type;
+
+  ArrayPointer array;
+};
+
+/*
+class Vec::BorrowedArray::iterator {
+ public:
+  iterator(Vec::BorrowedArray& array, Int current);
+  ~iterator() = default;
 
   // Input iterator requirements
   Scalar& operator*();
@@ -96,11 +120,13 @@ class Vec::iterator {
   Int operator-(const iterator& other) const;
 
  private:
-  Petsc::Vec& vec;
-  Scalar* array;
+  Vec::BorrowedArray& array;
   Int current;
 };
+*/
 
 }
+
+#include "vec.inl"
 
 #endif // SRC_VEC_H
