@@ -28,11 +28,11 @@ class DM {
   Mat CreateMatrix() const;
 
   enum VectorType {
-    LOCAL = 0,
-    GLOBAL,
+    Local = 0,
+    Global,
   };
   class BorrowedVec;
-  BorrowedVec BorrowVec(VectorType type);
+  BorrowedVec GetVector(VectorType type);
 
   void GlobalToLocal(const Vec& global, InsertMode mode, Vec& local) const;
   void GlobalToLocalBegin(const Vec& global, InsertMode mode, Vec& local) const;

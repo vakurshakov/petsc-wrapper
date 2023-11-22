@@ -38,7 +38,7 @@ Petsc::Mat DM::CreateMatrix() const {
   return mat;
 }
 
-DM::BorrowedVec DM::BorrowVec(VectorType type) {
+DM::BorrowedVec DM::GetVector(VectorType type) {
   return BorrowedVec(*this, type);
 }
 
@@ -110,15 +110,17 @@ DM::~DM() noexcept(false) {
 
 DM::BorrowedVec::BorrowedVec(DM& dm, DM::VectorType type) : dm(dm), type(type) {
   switch (type) {
-    case LOCAL: PetscCallThrow(DMGetLocalVector(dm, vec)); break;
-    case GLOBAL: PetscCallThrow(DMGetGlobalVector(dm, vec)); break;
+    case Local: PetscCallThrow(DMGetLocalVector(dm, vec)); return;
+    case Global: PetscCallThrow(DMGetGlobalVector(dm, vec)); return;
+    default: PetscCallThrow(PETSC_ERR_ARG_WRONG);
   }
 }
 
 DM::BorrowedVec::~BorrowedVec() {
   switch (type) {
-    case LOCAL: PetscCallThrow(DMRestoreLocalVector(dm, vec)); break;
-    case GLOBAL: PetscCallThrow(DMRestoreGlobalVector(dm, vec)); break;
+    case Local: PetscCallThrow(DMRestoreLocalVector(dm, vec)); return;
+    case Global: PetscCallThrow(DMRestoreGlobalVector(dm, vec)); return;
+    default: PetscCallThrow(PETSC_ERR_ARG_WRONG);
   }
 }
 
