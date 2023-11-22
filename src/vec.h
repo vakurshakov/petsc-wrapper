@@ -11,7 +11,6 @@
 namespace Petsc {
 
 /// @todo Create indexes<T> to reduce the need in array size.
-/// @todo Implement Vec::iterator::value(), Vec::iterator::index() methods.
 /// @note Is it important that views should be restored before next gather/scatter?
 
 class Vec {
@@ -120,6 +119,9 @@ class Vec::BasicBorrowedArray<arrConst>::BasicIterator {
 
   BasicIterator(Vec::BasicBorrowedArray<arrConst>& array, Int current);
   ~BasicIterator() = default;
+
+  Int index() const;
+  Reference value();
 
   // Input iterator requirements
   Reference operator*();

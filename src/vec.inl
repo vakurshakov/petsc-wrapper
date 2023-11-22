@@ -68,6 +68,19 @@ BasicIterator(Vec::BasicBorrowedArray<arrConst>& array, Int current)
 
 template<bool arrConst>
 template<bool iterConst>
+Int Vec::BasicBorrowedArray<arrConst>::BasicIterator<iterConst>::index() const {
+  return current;
+}
+
+template<bool arrConst>
+template<bool iterConst>
+Vec::BasicBorrowedArray<arrConst>::BasicIterator<iterConst>::Reference
+Vec::BasicBorrowedArray<arrConst>::BasicIterator<iterConst>::value() {
+  return array[current];
+}
+
+template<bool arrConst>
+template<bool iterConst>
 Vec::BasicBorrowedArray<arrConst>::BasicIterator<iterConst>::Reference
 Vec::BasicBorrowedArray<arrConst>::BasicIterator<iterConst>::operator*() {
   return array[current];
@@ -107,6 +120,5 @@ template<bool iterConst>
 Int Vec::BasicBorrowedArray<arrConst>::BasicIterator<iterConst>::operator-(const BasicIterator& other) const {
   return current - other.current;
 }
-
 
 }
