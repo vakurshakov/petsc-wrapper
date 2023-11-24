@@ -15,8 +15,6 @@ namespace Petsc {
 
 class Vec {
   template<bool isConst> class BasicBorrowedArray;
-  using BorrowedArray = BasicBorrowedArray<false>;
-  using ConstBorrowedArray = BasicBorrowedArray<true>;
 
  public:
   Vec() = default;
@@ -60,6 +58,9 @@ class Vec {
   void AssemblyBegin();
   void AssemblyEnd();
 
+  using BorrowedArray = BasicBorrowedArray<false>;
+  using ConstBorrowedArray = BasicBorrowedArray<true>;
+
   BorrowedArray GetArray(GetArrayType type = Default);
   ConstBorrowedArray GetArray() const;
   ConstBorrowedArray GetArrayRead() const;
@@ -83,7 +84,6 @@ class Vec {
 template<bool isConst>
 class Vec::BasicBorrowedArray {
   using VecRef = std::conditional_t<isConst, const Vec&, Vec&>;
-  using ArrayPointer = std::conditional_t<isConst, const Scalar*, Scalar*>;
   template<bool iterConst> class BasicIterator;
 
  public:
@@ -92,6 +92,8 @@ class Vec::BasicBorrowedArray {
 
   void Restore();
   ~BasicBorrowedArray() noexcept(false);
+
+  using ArrayPointer = std::conditional_t<isConst, const Scalar*, Scalar*>;
 
   operator const Scalar*() const { return array; }
   operator ArrayPointer() { return array; }
