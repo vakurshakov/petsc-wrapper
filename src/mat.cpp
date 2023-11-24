@@ -87,9 +87,7 @@ void Mat::View(PetscViewer viewer) const {
 }
 
 void Mat::Destroy() {
-  if (data) {
-    PetscCallThrow(MatDestroy(&data));
-  }
+  PetscCallThrow(MatDestroy(&data));
 }
 
 Mat::~Mat() noexcept(false) {

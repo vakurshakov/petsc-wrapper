@@ -189,9 +189,7 @@ void Vec::View(PetscViewer viewer) const {
 }
 
 void Vec::Destroy() {
-  if (data) {
-    PetscCallThrow(VecDestroy(&data));
-  }
+  PetscCallThrow(VecDestroy(&data));
 }
 
 Vec::~Vec() noexcept(false) {

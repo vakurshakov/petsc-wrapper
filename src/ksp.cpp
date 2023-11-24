@@ -60,9 +60,7 @@ const char* KSP::GetConvergedReason() const {
 }
 
 void KSP::Destroy() {
-  if (data) {
-    PetscCallThrow(KSPDestroy(&data));
-  }
+  PetscCallThrow(KSPDestroy(&data));
 }
 
 KSP::~KSP() noexcept(false) {

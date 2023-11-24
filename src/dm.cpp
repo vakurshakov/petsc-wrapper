@@ -98,9 +98,7 @@ std::pair<Int, const MPIInt*> DM::GetNeighbors() const {
 }
 
 void DM::Destroy() {
-  if (data) {
-    PetscCallThrow(DMDestroy(&data));
-  }
+  PetscCallThrow(DMDestroy(&data));
 }
 
 DM::~DM() noexcept(false) {
