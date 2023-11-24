@@ -5,7 +5,6 @@
 
 #include <petscdm.h>
 
-#include "context.h"
 #include "exception.h"
 #include "utils.h"
 #include "vec.h"
