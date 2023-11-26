@@ -71,13 +71,13 @@ class Vec {
   ~Vec() noexcept(false);
 
   /// @brief Conversion to PETSc vector
-  operator _p_Vec*() const { return data; }
-  operator _p_Vec**() { return &data; }
-  operator _p_PetscObject*() const { return reinterpret_cast<PetscObject>(data); }
-  operator _p_PetscObject**() { return reinterpret_cast<PetscObject*>(&data); }
+  operator _p_Vec*() const { return that; }
+  operator _p_Vec**() { return &that; }
+  operator _p_PetscObject*() const { return reinterpret_cast<PetscObject>(that); }
+  operator _p_PetscObject**() { return reinterpret_cast<PetscObject*>(&that); }
 
  private:
-  _p_Vec* data = nullptr;
+  _p_Vec* that = nullptr;
 };
 
 

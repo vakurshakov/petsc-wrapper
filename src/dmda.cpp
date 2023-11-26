@@ -3,7 +3,7 @@
 namespace Petsc {
 
 DA::DA(std::string_view name) : DM(name) {
-  PetscCallThrow(DMDACreate(PETSC_COMM_WORLD, &data));
+  PetscCallThrow(DMDACreate(PETSC_COMM_WORLD, &that));
 }
 
 /* static */ DA DA::Create() {
@@ -34,72 +34,72 @@ DA::DA(std::string_view name) : DM(name) {
 }
 
 void DA::SetSizes(Int3 global) {
-  PetscCallThrow(DMDASetSizes(data, global.x, global.y, global.z));
+  PetscCallThrow(DMDASetSizes(that, global.x, global.y, global.z));
 }
 
 void DA::SetNumProcs(Int3 procs) {
-  PetscCallThrow(DMDASetNumProcs(data, procs.x, procs.y, procs.z));
+  PetscCallThrow(DMDASetNumProcs(that, procs.x, procs.y, procs.z));
 }
 
 void DA::SetBoundaryType(Three<BoundaryType> boundary) {
-  PetscCallThrow(DMDASetBoundaryType(data, boundary.x, boundary.y, boundary.z));
+  PetscCallThrow(DMDASetBoundaryType(that, boundary.x, boundary.y, boundary.z));
 }
 
 void DA::SetDof(Int dof) {
-  PetscCallThrow(DMDASetDof(data, dof));
+  PetscCallThrow(DMDASetDof(that, dof));
 }
 
 void DA::SetStencilType(StencilType type) {
-  PetscCallThrow(DMDASetStencilType(data, type));
+  PetscCallThrow(DMDASetStencilType(that, type));
 }
 
 void DA::SetStencilWidth(Int s) {
-  PetscCallThrow(DMDASetStencilWidth(data, s));
+  PetscCallThrow(DMDASetStencilWidth(that, s));
 }
 
 void DA::SetOwnershipRanges(Three<const Int*> ranges) {
-  PetscCallThrow(DMDASetOwnershipRanges(data, ranges.x, ranges.y, ranges.z));
+  PetscCallThrow(DMDASetOwnershipRanges(that, ranges.x, ranges.y, ranges.z));
 }
 
 std::pair<Int3, Int3> DA::GetCorners() const {
   Int3 corner, size;
-  PetscCallThrow(DMDAGetCorners(data, &corner.x, &corner.y, &corner.z, &size.x, &size.y, &size.z));
+  PetscCallThrow(DMDAGetCorners(that, &corner.x, &corner.y, &corner.z, &size.x, &size.y, &size.z));
   return std::make_pair(corner, size);
 }
 
 std::pair<Int3, Int3> DA::GetGhostCorners() const {
   Int3 corner, size;
-  PetscCallThrow(DMDAGetGhostCorners(data, &corner.x, &corner.y, &corner.z, &size.x, &size.y, &size.z));
+  PetscCallThrow(DMDAGetGhostCorners(that, &corner.x, &corner.y, &corner.z, &size.x, &size.y, &size.z));
   return std::make_pair(corner, size);
 }
 
 void DA::SetFieldName(Int nf, const char* name) {
-  PetscCallThrow(DMDASetFieldName(data, nf, name));
+  PetscCallThrow(DMDASetFieldName(that, nf, name));
 }
 
 const char* DA::GetFieldName(Int nf) const  {
   const char* name;
-  PetscCallThrow(DMDAGetFieldName(data, nf, &name));
+  PetscCallThrow(DMDAGetFieldName(that, nf, &name));
   return name;
 }
 
 void DA::SetFieldNames(const char** names)  {
-  PetscCallThrow(DMDASetFieldNames(data, names));
+  PetscCallThrow(DMDASetFieldNames(that, names));
 }
 
 const char** DA::GetFieldNames() const  {
   const char** names;
-  PetscCallThrow(DMDAGetFieldNames(data, const_cast<const char* const**>(&names)));
+  PetscCallThrow(DMDAGetFieldNames(that, const_cast<const char* const**>(&names)));
   return names;
 }
 
 void DA::SetCoordinateName(Int nf, const char* name)  {
-  PetscCallThrow(DMDASetCoordinateName(data, nf, name));
+  PetscCallThrow(DMDASetCoordinateName(that, nf, name));
 }
 
 const char* DA::GetCoordinateName(Int nf) const  {
   const char* name;
-  PetscCallThrow(DMDAGetCoordinateName(data, nf, &name));
+  PetscCallThrow(DMDAGetCoordinateName(that, nf, &name));
   return name;
 }
 

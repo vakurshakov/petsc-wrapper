@@ -9,32 +9,32 @@ DM::DM(std::string_view name) {
 }
 
 void DM::SetFromOptions() {
-  PetscCallThrow(DMSetFromOptions(data));
+  PetscCallThrow(DMSetFromOptions(that));
 }
 
 void DM::SetUp() {
-  PetscCallThrow(DMSetUp(data));
+  PetscCallThrow(DMSetUp(that));
 }
 
 void DM::View(PetscViewer viewer) const {
-  PetscCallThrow(DMView(data, viewer));
+  PetscCallThrow(DMView(that, viewer));
 }
 
 Petsc::Vec DM::CreateGlobalVector() const {
   Vec vec;
-  PetscCallThrow(DMCreateGlobalVector(data, vec));
+  PetscCallThrow(DMCreateGlobalVector(that, vec));
   return vec;
 }
 
 Petsc::Vec DM::CreateLocalVector() const {
   Vec vec;
-  PetscCallThrow(DMCreateLocalVector(data, vec));
+  PetscCallThrow(DMCreateLocalVector(that, vec));
   return vec;
 }
 
 Petsc::Mat DM::CreateMatrix() const {
   Mat mat;
-  PetscCallThrow(DMCreateMatrix(data, mat));
+  PetscCallThrow(DMCreateMatrix(that, mat));
   return mat;
 }
 
@@ -43,62 +43,62 @@ DM::BorrowedVec DM::GetVector(VectorType type) {
 }
 
 void DM::GlobalToLocal(const Vec& global, InsertMode mode, Vec& local) const {
-  PetscCallThrow(DMGlobalToLocal(data, global, mode, local));
+  PetscCallThrow(DMGlobalToLocal(that, global, mode, local));
 }
 
 void DM::GlobalToLocalBegin(const Vec& global, InsertMode mode, Vec& local) const {
-  PetscCallThrow(DMGlobalToLocalBegin(data, global, mode, local));
+  PetscCallThrow(DMGlobalToLocalBegin(that, global, mode, local));
 }
 
 void DM::GlobalToLocalEnd(const Vec& global, InsertMode mode, Vec& local) const {
-  PetscCallThrow(DMGlobalToLocalEnd(data, global, mode, local));
+  PetscCallThrow(DMGlobalToLocalEnd(that, global, mode, local));
 }
 
 void DM::LocalToGlobal(const Vec& local, InsertMode mode, Vec& global) const {
-  PetscCallThrow(DMLocalToGlobal(data, local, mode, global));
+  PetscCallThrow(DMLocalToGlobal(that, local, mode, global));
 }
 
 void DM::LocalToGlobalBegin(const Vec& local, InsertMode mode, Vec& global) const {
-  PetscCallThrow(DMLocalToGlobalBegin(data, local, mode, global));
+  PetscCallThrow(DMLocalToGlobalBegin(that, local, mode, global));
 }
 
 void DM::LocalToGlobalEnd(const Vec& local, InsertMode mode, Vec& global) const {
-  PetscCallThrow(DMLocalToGlobalEnd(data, local, mode, global));
+  PetscCallThrow(DMLocalToGlobalEnd(that, local, mode, global));
 }
 
 void DM::LocalToLocalBegin(const Vec& global, InsertMode mode, Vec& local) const {
-  PetscCallThrow(DMLocalToLocalBegin(data, global, mode, local));
+  PetscCallThrow(DMLocalToLocalBegin(that, global, mode, local));
 }
 
 void DM::LocalToLocalEnd(const Vec& global, InsertMode mode, Vec& local) const {
-  PetscCallThrow(DMLocalToLocalEnd(data, global, mode, local));
+  PetscCallThrow(DMLocalToLocalEnd(that, global, mode, local));
 }
 
 Int DM::GetDimension() const {
   Int dim;
-  PetscCallThrow(DMGetDimension(data, &dim));
+  PetscCallThrow(DMGetDimension(that, &dim));
   return dim;
 }
 
 void DM::SetDimension(Int dim) {
-  PetscCallThrow(DMSetDimension(data, dim));
+  PetscCallThrow(DMSetDimension(that, dim));
 }
 
 std::pair<Int, Int> DM::GetDimPoints(Int dim) const {
   Int start, end;
-  PetscCallThrow(DMGetDimPoints(data, dim, &start, &end));
+  PetscCallThrow(DMGetDimPoints(that, dim, &start, &end));
   return std::make_pair(start, end);
 }
 
 std::pair<Int, const MPIInt*> DM::GetNeighbors() const {
   Int nranks;
   const MPIInt* ranks;
-  PetscCallThrow(DMGetNeighbors(data, &nranks, &ranks));
+  PetscCallThrow(DMGetNeighbors(that, &nranks, &ranks));
   return std::make_pair(nranks, ranks);
 }
 
 void DM::Destroy() {
-  PetscCallThrow(DMDestroy(&data));
+  PetscCallThrow(DMDestroy(&that));
 }
 
 DM::~DM() noexcept(false) {

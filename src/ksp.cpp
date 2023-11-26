@@ -3,7 +3,7 @@
 namespace Petsc {
 
 KSP::KSP(std::string_view name) {
-  PetscCallThrow(KSPCreate(PETSC_COMM_WORLD, &data));
+  PetscCallThrow(KSPCreate(PETSC_COMM_WORLD, &that));
   if (!name.empty()) {
     PetscCallThrow(PetscObjectSetName(*this, name.data()));
   }
@@ -11,56 +11,56 @@ KSP::KSP(std::string_view name) {
 
 KSP KSP::FromOptions(std::string_view name) {
   KSP ksp(name);
-  PetscCallThrow(KSPSetFromOptions(ksp.data));
+  PetscCallThrow(KSPSetFromOptions(ksp));
   return ksp;
 }
 
 void KSP::SetOperators(Petsc::Mat& linearOp, Petsc::Mat& preconditionOp) {
-  PetscCallThrow(KSPSetOperators(data, linearOp, preconditionOp));
+  PetscCallThrow(KSPSetOperators(that, linearOp, preconditionOp));
 }
 
 void KSP::SetTolerances(Real relativeTol, Real absoluteTol, Real divergenceTol, Int itNumber) {
-  PetscCallThrow(KSPSetTolerances(data, relativeTol, absoluteTol, divergenceTol, itNumber));
+  PetscCallThrow(KSPSetTolerances(that, relativeTol, absoluteTol, divergenceTol, itNumber));
 }
 
 void KSP::SetInitialGuessNonzero(Bool flag) {
-  PetscCallThrow(KSPSetInitialGuessNonzero(data, flag));
+  PetscCallThrow(KSPSetInitialGuessNonzero(that, flag));
 }
 
 void KSP::SetFromOptions() {
-  PetscCallThrow(KSPSetFromOptions(data));
+  PetscCallThrow(KSPSetFromOptions(that));
 }
 
 void KSP::SetUp() {
-  PetscCallThrow(KSPSetUp(data));
+  PetscCallThrow(KSPSetUp(that));
 }
 
 void KSP::Solve(const Petsc::Vec& rhs, Petsc::Vec& solution) {
-  PetscCallThrow(KSPSolve(data, rhs, solution));
+  PetscCallThrow(KSPSolve(that, rhs, solution));
 }
 
 void KSP::GetSolution(Petsc::Vec& solution) const {
-  PetscCallThrow(KSPGetSolution(data, solution));
+  PetscCallThrow(KSPGetSolution(that, solution));
 }
 
 void KSP::View(PetscViewer viewer) const {
-  PetscCallThrow(KSPView(data, viewer));
+  PetscCallThrow(KSPView(that, viewer));
 }
 
 Int KSP::GetIterationNumber() const {
   Int iterations;
-  PetscCallThrow(KSPGetIterationNumber(data, &iterations));
+  PetscCallThrow(KSPGetIterationNumber(that, &iterations));
   return iterations;
 }
 
 const char* KSP::GetConvergedReason() const {
   const char* reason;
-  PetscCallThrow(KSPGetConvergedReasonString(data, &reason));
+  PetscCallThrow(KSPGetConvergedReasonString(that, &reason));
   return reason;
 }
 
 void KSP::Destroy() {
-  PetscCallThrow(KSPDestroy(&data));
+  PetscCallThrow(KSPDestroy(&that));
 }
 
 KSP::~KSP() noexcept(false) {

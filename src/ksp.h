@@ -36,13 +36,13 @@ class KSP {
   ~KSP() noexcept(false);
 
   /// @brief Conversion to PETSc ksp
-  operator _p_KSP*() const { return data; }
-  operator _p_KSP**() { return &data; }
-  operator _p_PetscObject*() const { return reinterpret_cast<PetscObject>(data); }
-  operator _p_PetscObject**() { return reinterpret_cast<PetscObject*>(&data); }
+  operator _p_KSP*() const { return that; }
+  operator _p_KSP**() { return &that; }
+  operator _p_PetscObject*() const { return reinterpret_cast<PetscObject>(that); }
+  operator _p_PetscObject**() { return reinterpret_cast<PetscObject*>(&that); }
 
  private:
-  _p_KSP* data = nullptr;
+  _p_KSP* that = nullptr;
 };
 
 }

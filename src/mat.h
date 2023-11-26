@@ -44,13 +44,13 @@ class Mat {
   ~Mat() noexcept(false);
 
   /// @brief Conversion to PETSc matrix
-  operator _p_Mat*() const { return data; }
-  operator _p_Mat**() { return &data; }
-  operator _p_PetscObject*() const { return reinterpret_cast<PetscObject>(data); }
-  operator _p_PetscObject**() { return reinterpret_cast<PetscObject*>(&data); }
+  operator _p_Mat*() const { return that; }
+  operator _p_Mat**() { return &that; }
+  operator _p_PetscObject*() const { return reinterpret_cast<PetscObject>(that); }
+  operator _p_PetscObject**() { return reinterpret_cast<PetscObject*>(&that); }
 
  private:
-  _p_Mat* data = nullptr;
+  _p_Mat* that = nullptr;
 };
 
 }

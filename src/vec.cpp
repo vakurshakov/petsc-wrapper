@@ -3,10 +3,10 @@
 namespace Petsc {
 
 Vec::Vec(Int localSize, Int globalSize, std::string_view name) {
-  PetscCallThrow(VecCreate(PETSC_COMM_WORLD, &data));
-  PetscCallThrow(VecSetSizes(data, localSize, globalSize));
-  PetscCallThrow(VecSetType(data, VECSTANDARD)); // seq on one process and mpi on multiple
-  PetscCallThrow(VecSetUp(data));                // explicitly setting up internal vec structures
+  PetscCallThrow(VecCreate(PETSC_COMM_WORLD, &that));
+  PetscCallThrow(VecSetSizes(that, localSize, globalSize));
+  PetscCallThrow(VecSetType(that, VECSTANDARD)); // seq on one process and mpi on multiple
+  PetscCallThrow(VecSetUp(that));                // explicitly setting up internal vec structures
   if (!name.empty()) {
     PetscCallThrow(PetscObjectSetName(*this, name.data()));
   }
@@ -28,32 +28,32 @@ Vec::Vec(Int localSize, Int globalSize, std::string_view name) {
 
 Vec Vec::Duplicate() const {
   Vec vec;
-  PetscCallThrow(VecDuplicate(data, vec));
+  PetscCallThrow(VecDuplicate(that, vec));
   return vec;
 }
 
 Vec Vec::Copy() const {
   Vec vec;
-  PetscCallThrow(VecDuplicate(data, vec));
-  PetscCallThrow(VecCopy(data, vec));
+  PetscCallThrow(VecDuplicate(that, vec));
+  PetscCallThrow(VecCopy(that, vec));
   return vec;
 }
 
 Int Vec::Size() const {
   Int size;
-  PetscCallThrow(VecGetSize(data, &size));
+  PetscCallThrow(VecGetSize(that, &size));
   return size;
 }
 
 Int Vec::LocalSize() const {
   Int localSize;
-  PetscCallThrow(VecGetLocalSize(data, &localSize));
+  PetscCallThrow(VecGetLocalSize(that, &localSize));
   return localSize;
 }
 
 std::pair<Int, Int> Vec::GetOwnershipRange() const {
   Int localStart, localEnd;
-  PetscCallThrow(VecGetOwnershipRange(data, &localStart, &localEnd));
+  PetscCallThrow(VecGetOwnershipRange(that, &localStart, &localEnd));
   return std::make_pair(localStart, localEnd);
 }
 
@@ -70,103 +70,103 @@ void Vec::PointwiseDivide(Vec& w, const Vec& x, const Vec& y) {
 }
 
 Petsc::Vec& Vec::AXPY(Scalar a, const Vec& x) {
-  PetscCallThrow(VecAXPY(data, a, x));
+  PetscCallThrow(VecAXPY(that, a, x));
   return *this;
 }
 
 Petsc::Vec& Vec::AYPX(Scalar a, const Vec& x) {
-  PetscCallThrow(VecAYPX(data, a, x));
+  PetscCallThrow(VecAYPX(that, a, x));
   return *this;
 }
 
 Petsc::Vec& Vec::AXPBY(Scalar a, Scalar b, const Vec& x) {
-  PetscCallThrow(VecAXPBY(data, a, b, x));
+  PetscCallThrow(VecAXPBY(that, a, b, x));
   return *this;
 }
 
 Petsc::Vec& Vec::AXPBYPCZ(Scalar a, Scalar b, Scalar c, const Vec& x, const Vec& y) {
-  PetscCallThrow(VecAXPBYPCZ(data, a, b, c, x, y));
+  PetscCallThrow(VecAXPBYPCZ(that, a, b, c, x, y));
   return *this;
 }
 
 Petsc::Vec& Vec::Set(Scalar scalar) {
-  PetscCallThrow(VecSet(data, scalar));
+  PetscCallThrow(VecSet(that, scalar));
   return *this;
 }
 
 Petsc::Vec& Vec::Scale(Scalar scalar) {
-  PetscCallThrow(VecScale(data, scalar));
+  PetscCallThrow(VecScale(that, scalar));
   return *this;
 }
 
 Petsc::Vec& Vec::Shift(Scalar scalar) {
-  PetscCallThrow(VecShift(data, scalar));
+  PetscCallThrow(VecShift(that, scalar));
   return *this;
 }
 
 Petsc::Vec& Vec::Abs() {
-  PetscCallThrow(VecAbs(data));
+  PetscCallThrow(VecAbs(that));
   return *this;
 }
 
 Petsc::Vec& Vec::Reciprocal() {
-  PetscCallThrow(VecReciprocal(data));
+  PetscCallThrow(VecReciprocal(that));
   return *this;
 }
 
 Petsc::Vec& Vec::Normalize(Real* prevNorm2) {
-  PetscCallThrow(VecNormalize(data, prevNorm2));
+  PetscCallThrow(VecNormalize(that, prevNorm2));
   return *this;
 }
 
 Scalar Vec::Dot(const Vec& y) const {
   Scalar result;
-  PetscCallThrow(VecDot(data, y, &result));
+  PetscCallThrow(VecDot(that, y, &result));
   return result;
 }
 
 Scalar Vec::TDot(const Vec& y) const {
   Scalar result;
-  PetscCallThrow(VecTDot(data, y, &result));
+  PetscCallThrow(VecTDot(that, y, &result));
   return result;
 }
 
 Scalar Vec::Sum() const {
   Scalar result;
-  PetscCallThrow(VecSum(data, &result));
+  PetscCallThrow(VecSum(that, &result));
   return result;
 }
 
 Real Vec::Norm(NormType type) const {
   Scalar result;
-  PetscCallThrow(VecNorm(data, type, &result));
+  PetscCallThrow(VecNorm(that, type, &result));
   return result;
 }
 
 std::pair<Int, Real> Vec::Max() const {
   Int index;
   Real result;
-  PetscCallThrow(VecMax(data, &index, &result));
+  PetscCallThrow(VecMax(that, &index, &result));
   return std::make_pair(index, result);
 }
 
 std::pair<Int, Real> Vec::Min() const {
   Int index;
   Real result;
-  PetscCallThrow(VecMin(data, &index, &result));
+  PetscCallThrow(VecMin(that, &index, &result));
   return std::make_pair(index, result);
 }
 
 void Vec::SetValues(Int size, const Int idx[], const Scalar values[], InsertMode mode) {
-  PetscCallThrow(VecSetValues(data, size, idx, values, mode));
+  PetscCallThrow(VecSetValues(that, size, idx, values, mode));
 }
 
 void Vec::AssemblyBegin() {
-  PetscCallThrow(VecAssemblyBegin(data));
+  PetscCallThrow(VecAssemblyBegin(that));
 }
 
 void Vec::AssemblyEnd() {
-  PetscCallThrow(VecAssemblyEnd(data));
+  PetscCallThrow(VecAssemblyEnd(that));
 }
 
 Vec::BorrowedArray Vec::GetArray(GetArrayType type) {
@@ -185,11 +185,11 @@ Vec::ConstBorrowedArray Vec::GetArrayRead() const {
 }
 
 void Vec::View(PetscViewer viewer) const {
-  PetscCallThrow(VecView(data, viewer));
+  PetscCallThrow(VecView(that, viewer));
 }
 
 void Vec::Destroy() {
-  PetscCallThrow(VecDestroy(&data));
+  PetscCallThrow(VecDestroy(&that));
 }
 
 Vec::~Vec() noexcept(false) {

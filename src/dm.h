@@ -53,13 +53,13 @@ class DM {
   virtual ~DM() noexcept(false);
 
   /// @brief Conversion to PETSc DM
-  operator _p_DM*() const { return data; }
-  operator _p_DM**() { return &data; }
-  operator _p_PetscObject*() const { return reinterpret_cast<PetscObject>(data); }
-  operator _p_PetscObject**() { return reinterpret_cast<PetscObject*>(&data); }
+  operator _p_DM*() const { return that; }
+  operator _p_DM**() { return &that; }
+  operator _p_PetscObject*() const { return reinterpret_cast<PetscObject>(that); }
+  operator _p_PetscObject**() { return reinterpret_cast<PetscObject*>(&that); }
 
  protected:
-  _p_DM* data = nullptr;
+  _p_DM* that = nullptr;
 };
 
 class DM::BorrowedVec {
