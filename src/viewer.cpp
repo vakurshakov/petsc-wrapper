@@ -2,6 +2,8 @@
 
 namespace Petsc {
 
+Viewer::Viewer(_p_PetscViewer* other) : that(other) {}
+
 Viewer Viewer::STDERR_WORLD = PETSC_VIEWER_STDERR_WORLD;
 Viewer Viewer::STDERR_SELF = PETSC_VIEWER_STDERR_SELF;
 Viewer Viewer::STDOUT_WORLD = PETSC_VIEWER_STDOUT_WORLD;
@@ -22,26 +24,26 @@ Viewer::Viewer(std::string_view name) {
 }
 
 void Viewer::SetFromOptions() {
-  PetscCallThrow(PetscViewerSetFromOptions(data));
+  PetscCallThrow(PetscViewerSetFromOptions(that));
 }
 
 void Viewer::SetType(PetscViewerType type) {
-  PetscCallThrow(PetscViewerSetType(data, type));
+  PetscCallThrow(PetscViewerSetType(that, type));
 }
 
 void Viewer::FileSetMode(FileMode mode) {
-  PetscCallThrow(PetscViewerFileSetMode(data, mode));
+  PetscCallThrow(PetscViewerFileSetMode(that, mode));
 }
 
 void Viewer::FileSetName(const char name[]) {
-  PetscCallThrow(PetscViewerFileSetName(data, name));
+  PetscCallThrow(PetscViewerFileSetName(that, name));
 }
 
 void Viewer::Destroy() {
-  PetscCallThrow(PetscViewerDestroy(&data));
+  PetscCallThrow(PetscViewerDestroy(&that));
 }
 
-Viewer::~Viewer() {
+Viewer::~Viewer() noexcept(false) {
   Destroy();
 }
 
