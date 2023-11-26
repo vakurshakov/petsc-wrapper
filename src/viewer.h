@@ -13,17 +13,7 @@ namespace Petsc {
 using FileMode = PetscFileMode;
 
 class Viewer {
-  /// @brief Private constructor to mimic PETSc default viewers
-  Viewer(_p_PetscViewer* other);
-
  public:
-  static Viewer STDERR_WORLD;
-  static Viewer STDERR_SELF;
-  static Viewer STDOUT_WORLD;
-  static Viewer STDOUT_SELF;
-  static Viewer BINARY_WORLD;
-  static Viewer BINARY_SELF;
-
   Viewer(std::string_view name = {});
   PETSC_DEFAULT_COPY_POLICY(Viewer);
 
