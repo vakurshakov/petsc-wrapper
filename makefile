@@ -31,6 +31,8 @@ SRCS :=            \
 	src/ksp.cpp      \
 	src/dm.cpp       \
 	src/dmda.cpp     \
+	src/viewer.cpp   \
+	src/binary.cpp   \
 
 OBJS := $(SRCS:%.cpp=$(OBJDIR)/%.o)
 DEPS := $(SRCS:%.cpp=$(OBJDIR)/%.d)

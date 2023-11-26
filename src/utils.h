@@ -6,6 +6,8 @@
 namespace Petsc {
 
 using Int = PetscInt;
+using Int32 = PetscInt32;
+using Int64 = PetscInt64;
 using Bool = PetscBool;
 using Real = PetscReal;
 using Scalar = PetscScalar;
