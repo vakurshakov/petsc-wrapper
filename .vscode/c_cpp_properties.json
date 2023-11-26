@@ -7,9 +7,9 @@
         {
             "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/src/**",
-                "${workspaceFolder}/${PETSC_DIR}/include/**",
-                "${workspaceFolder}/${PETSC_DIR}/${PETSC_ARCH}/include/**"
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/${PETSC_DIR}/include/*",
+                "${workspaceFolder}/${PETSC_DIR}/${PETSC_ARCH}/include/*"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/g++",
