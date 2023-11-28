@@ -1,6 +1,8 @@
 #ifndef SRC_UTILS_H
 #define SRC_UTILS_H
 
+#include <utility>
+
 #include <petscsystypes.h>
 
 namespace Petsc {
@@ -61,6 +63,12 @@ enum GetArrayType {
   \
   T(T&& other) = delete;                  \
   T& operator=(T&& other) = delete        \
+
+
+template<typename... Args>
+void Printf(MPI_Comm comm, const char format[], Args&&... args) {
+  PetscCallThrow(PetscPrintf(comm, format, std::forward<Args>(args)...));
+}
 
 }
 

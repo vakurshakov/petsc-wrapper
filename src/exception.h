@@ -29,7 +29,7 @@ class Exception : public std::runtime_error {
       std::stringstream msg;                                 \
       msg << "PETSC ERROR: "                                 \
           << PETSC_FUNCTION_NAME_CXX << "() "                \
-          << "at " << __FILE__ << ":" << __LINE__;           \
+          << "at " << __FILE__ << ":" << __LINE__ << "\n";   \
       throw Petsc::Exception(msg.str(), ierr_petsc_call_);   \
     }                                                        \
   } while (0)
