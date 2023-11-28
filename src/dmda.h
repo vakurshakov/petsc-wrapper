@@ -25,12 +25,19 @@ class DA : public DM {
   static DA Create3d(Three<BoundaryType> boundary, StencilType type, Int3 global, Int3 procs, Int dof, Int s, Three<const Int*> ranges);
 
   void SetSizes(Int3 global);
+  Int3 GetSizes() const;
   void SetNumProcs(Int3 procs);
+  Int3 GetNumProcs() const;
   void SetBoundaryType(Three<BoundaryType> type);
+  Three<BoundaryType> GetBoundaryType() const;
   void SetDof(Int dof);
+  Int GetDof() const;
   void SetStencilType(StencilType type);
+  StencilType GetStencilType() const;
   void SetStencilWidth(Int width);
+  Int GetStencilWidth() const;
   void SetOwnershipRanges(Three<const Int*> ranges);
+  Three<const Int*> GetOwnershipRanges() const;
 
   std::pair<Int3, Int3> GetCorners() const;
   std::pair<Int3, Int3> GetGhostCorners() const;
@@ -42,7 +49,8 @@ class DA : public DM {
   void SetCoordinateName(Int nf, const char* name);
   const char* GetCoordinateName(Int nf) const;
 
-  /// @todo guard type T with std::enable_if, T should be pointer * dim
+  /// @todo const correctness for borrowed arrays
+  /// @todo guard type T with std::enable_if, T should be at least pointer
   template<typename T> class Borrowed;
   template<typename T> Borrowed<T> GetArray(Vec& vec, GetArrayType type = Default);
 };

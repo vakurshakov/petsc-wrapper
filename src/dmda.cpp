@@ -37,28 +37,70 @@ void DA::SetSizes(Int3 global) {
   PetscCallThrow(DMDASetSizes(that, global.x, global.y, global.z));
 }
 
+Int3 DA::GetSizes() const {
+  Int3 size;
+  PetscCallThrow(DMDAGetInfo(that, NULL, &size.x, &size.y, &size.z, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL));
+  return size;
+}
+
 void DA::SetNumProcs(Int3 procs) {
   PetscCallThrow(DMDASetNumProcs(that, procs.x, procs.y, procs.z));
+}
+
+Int3 DA::GetNumProcs() const {
+  Int3 procs;
+  PetscCallThrow(DMDAGetInfo(that, NULL, NULL, NULL, NULL, &procs.x, &procs.y, &procs.y, NULL, NULL, NULL, NULL, NULL, NULL));
+  return procs;
 }
 
 void DA::SetBoundaryType(Three<BoundaryType> boundary) {
   PetscCallThrow(DMDASetBoundaryType(that, boundary.x, boundary.y, boundary.z));
 }
 
+Three<DM::BoundaryType> DA::GetBoundaryType() const {
+  Three<DM::BoundaryType> bound;
+  PetscCallThrow(DMDAGetInfo(that, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, &bound.x, &bound.y, &bound.z, NULL));
+  return bound;
+}
+
 void DA::SetDof(Int dof) {
   PetscCallThrow(DMDASetDof(that, dof));
+}
+
+Int DA::GetDof() const {
+  Int dof;
+  PetscCallThrow(DMDAGetDof(that, &dof));
+  return dof;
 }
 
 void DA::SetStencilType(StencilType type) {
   PetscCallThrow(DMDASetStencilType(that, type));
 }
 
+DA::StencilType DA::GetStencilType() const {
+  DA::StencilType type;
+  PetscCallThrow(DMDAGetStencilType(that, &type));
+  return type;
+}
+
 void DA::SetStencilWidth(Int s) {
   PetscCallThrow(DMDASetStencilWidth(that, s));
 }
 
+Int DA::GetStencilWidth() const {
+  Int width;
+  PetscCallThrow(DMDAGetStencilWidth(that, &width));
+  return width;
+}
+
 void DA::SetOwnershipRanges(Three<const Int*> ranges) {
   PetscCallThrow(DMDASetOwnershipRanges(that, ranges.x, ranges.y, ranges.z));
+}
+
+Three<const Int*> DA::GetOwnershipRanges() const {
+  Three<const Int*> ranges;
+  PetscCallThrow(DMDAGetOwnershipRanges(that, &ranges.x, &ranges.y, &ranges.z));
+  return ranges;
 }
 
 std::pair<Int3, Int3> DA::GetCorners() const {
