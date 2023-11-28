@@ -57,16 +57,22 @@ std::pair<Int, Int> Vec::GetOwnershipRange() const {
   return std::make_pair(localStart, localEnd);
 }
 
-void Vec::WAXPY(Vec& w, Scalar a, const Vec& x, const Vec& y) {
+/* static */ Vec Vec::WAXPY(Scalar a, const Vec& x, const Vec& y) {
+  Vec w = x.Duplicate();
   PetscCallThrow(VecWAXPY(w, a, x, y));
+  return w;
 }
 
-void Vec::PointwiseMult(Vec& w, const Vec& x, const Vec& y) {
+/* static */ Vec Vec::PointwiseMult(const Vec& x, const Vec& y) {
+  Vec w = x.Duplicate();
   PetscCallThrow(VecPointwiseMult(w, x, y));
+  return w;
 }
 
-void Vec::PointwiseDivide(Vec& w, const Vec& x, const Vec& y) {
+/* static */ Vec Vec::PointwiseDivide(const Vec& x, const Vec& y) {
+  Vec w = x.Duplicate();
   PetscCallThrow(VecPointwiseDivide(w, x, y));
+  return w;
 }
 
 Petsc::Vec& Vec::AXPY(Scalar a, const Vec& x) {
@@ -182,6 +188,10 @@ Vec::ConstBorrowedArray Vec::GetArray() const {
 
 Vec::ConstBorrowedArray Vec::GetArrayRead() const {
   return ConstBorrowedArray(*this, Read);
+}
+
+void Vec::Load(PetscViewer viewer) {
+  PetscCallThrow(VecLoad(that, viewer));
 }
 
 void Vec::View(PetscViewer viewer) const {

@@ -32,9 +32,9 @@ class Vec {
   Int LocalSize() const;
   std::pair<Int, Int> GetOwnershipRange() const;
 
-  static void WAXPY(Vec& w, Scalar a, const Vec& x, const Vec& y);
-  static void PointwiseMult(Vec& w, const Vec& x, const Vec& y);
-  static void PointwiseDivide(Vec& w, const Vec& x, const Vec& y);
+  static Vec WAXPY(Scalar a, const Vec& x, const Vec& y);
+  static Vec PointwiseMult(const Vec& x, const Vec& y);
+  static Vec PointwiseDivide(const Vec& x, const Vec& y);
 
   Vec& AXPY(Scalar a, const Vec& x);
   Vec& AYPX(Scalar a, const Vec& x);
@@ -65,6 +65,7 @@ class Vec {
   ConstBorrowedArray GetArray() const;
   ConstBorrowedArray GetArrayRead() const;
 
+  void Load(PetscViewer viewer);
   void View(PetscViewer viewer) const;
 
   void Destroy();
