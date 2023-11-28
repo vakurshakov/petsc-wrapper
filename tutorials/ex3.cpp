@@ -51,11 +51,11 @@ int main(int argc, char** argv) {
     using_read_only_vector(z);
   }
   catch (const Petsc::Exception& e) {
-    PetscCall(PetscPrintf(PETSC_COMM_WORLD, e.what()));
+    Printf(PETSC_COMM_WORLD, e.what());
     PetscCallMPI(MPI_Abort(PETSC_COMM_WORLD, (MPIInt)e.code()));
   }
   catch (...) {
-    PetscCall(PetscPrintf(PETSC_COMM_WORLD, "Unkown exception captured!"));
+    Printf(PETSC_COMM_WORLD, "Unkown exception captured!");
   }
 
   return EXIT_SUCCESS;

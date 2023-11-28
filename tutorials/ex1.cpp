@@ -77,16 +77,16 @@ int main(int argc, char** argv) {
     auto reason = ksp.GetConvergedReason();
     auto iterations = ksp.GetIterationNumber();
     auto error_norm = x.AXPY(-1.0, u).Norm(NORM_2);
-    PetscCall(PetscPrintf(PETSC_COMM_WORLD, "Converged reason: %s\n", reason));
-    PetscCall(PetscPrintf(PETSC_COMM_WORLD, "Iterations: %" PetscInt_FMT "\n", iterations));
-    PetscCall(PetscPrintf(PETSC_COMM_WORLD, "Norm of error: %g\n", (double)error_norm));
+    Printf(PETSC_COMM_WORLD, "Converged reason: %s\n", reason);
+    Printf(PETSC_COMM_WORLD, "Iterations: %" PetscInt_FMT "\n", iterations);
+    Printf(PETSC_COMM_WORLD, "Norm of error: %g\n", (double)error_norm);
   }
   catch (const Petsc::Exception& e) {
-    PetscCall(PetscPrintf(PETSC_COMM_WORLD, e.what()));
+    Printf(PETSC_COMM_WORLD, e.what());
     PetscCallMPI(MPI_Abort(PETSC_COMM_WORLD, (MPIInt)e.code()));
   }
   catch (...) {
-    PetscCall(PetscPrintf(PETSC_COMM_WORLD, "Unkown exception captured!"));
+    Printf(PETSC_COMM_WORLD, "Unkown exception captured!");
   }
 
   return EXIT_SUCCESS;
