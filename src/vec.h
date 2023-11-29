@@ -7,9 +7,11 @@
 
 #include "exception.h"
 #include "utils.h"
+#include "is.h"
 
 namespace Petsc {
 
+/// @todo Generalize borrowing concept on different types.
 /// @todo Create indexes<T> to reduce the need in array size.
 /// @note Is it important that views should be restored before next gather/scatter?
 
@@ -64,6 +66,9 @@ class Vec {
   BorrowedArray GetArray(GetArrayType type = Default);
   ConstBorrowedArray GetArray() const;
   ConstBorrowedArray GetArrayRead() const;
+
+  class BorrowedVec;
+  BorrowedVec GetSubVector(const IS& is);
 
   void Load(PetscViewer viewer);
   void View(PetscViewer viewer) const;
@@ -141,6 +146,24 @@ class Vec::BasicBorrowedArray<arrConst>::BasicIterator {
  private:
   Vec::BasicBorrowedArray<arrConst>& array;
   Int current;
+};
+
+
+class Vec::BorrowedVec {
+ public:
+  BorrowedVec(Vec& vec, const IS& is);
+  ~BorrowedVec() noexcept(false);
+  PETSC_NO_COPY_POLICY(BorrowedVec);
+
+  /// @todo `operator.` is not overloadable
+  operator const Vec&() const { return subVec; }
+  operator Vec&() { return subVec; }
+
+ private:
+  Vec& vec;
+  const IS& is;
+
+  Vec subVec;
 };
 
 }

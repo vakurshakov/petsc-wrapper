@@ -15,6 +15,8 @@ using Real = PetscReal;
 using Scalar = PetscScalar;
 using MPIInt = PetscMPIInt;
 
+using CopyMode = PetscCopyMode;
+
 template<typename T>
 struct Two {
   T x; T y;

@@ -27,6 +27,7 @@ OBJDIR := bin-int
 SRCS :=            \
 	src/context.cpp  \
 	src/vec.cpp      \
+	src/is.cpp       \
 	src/mat.cpp      \
 	src/ksp.cpp      \
 	src/dm.cpp       \

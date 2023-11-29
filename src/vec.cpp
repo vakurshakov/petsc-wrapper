@@ -190,6 +190,10 @@ Vec::ConstBorrowedArray Vec::GetArrayRead() const {
   return ConstBorrowedArray(*this, Read);
 }
 
+Vec::BorrowedVec Vec::GetSubVector(const IS& is) {
+  return BorrowedVec(*this, is);
+}
+
 void Vec::Load(PetscViewer viewer) {
   PetscCallThrow(VecLoad(that, viewer));
 }
@@ -204,6 +208,15 @@ void Vec::Destroy() {
 
 Vec::~Vec() noexcept(false) {
   Destroy();
+}
+
+Vec::BorrowedVec::BorrowedVec(Vec& vec, const IS& is)
+    : vec(vec), is(is) {
+  PetscCallThrow(VecGetSubVector(vec, is, subVec));
+}
+
+Vec::BorrowedVec::~BorrowedVec() {
+  PetscCallThrow(VecRestoreSubVector(vec, is, subVec));
 }
 
 }
