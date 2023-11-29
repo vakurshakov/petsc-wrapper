@@ -3,7 +3,7 @@
 #include <binary.h>
 #include <dmda.h>
 
-constexpr const char* output_filename = "ex4_vec";
+constexpr const char* output_filename = "ex4_out";
 
 void fill_vector(Petsc::DA& da, Petsc::Vec& vec);
 void compare_vectors(const Petsc::Vec& lhs, const Petsc::Vec& rhs);
