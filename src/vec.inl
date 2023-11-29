@@ -38,7 +38,7 @@ Vec::BasicBorrowedArray<isConst>::begin() {
 template<bool isConst>
 Vec::BasicBorrowedArray<isConst>::Iterator
 Vec::BasicBorrowedArray<isConst>::end() {
-  Int localSize = vec.LocalSize();
+  Int localSize = vec.GetLocalSize();
   return Iterator(*this, localSize);
 }
 
@@ -51,7 +51,7 @@ Vec::BasicBorrowedArray<isConst>::begin() const {
 template<bool isConst>
 Vec::BasicBorrowedArray<isConst>::ConstIterator
 Vec::BasicBorrowedArray<isConst>::end() const {
-  Int localSize = vec.LocalSize();
+  Int localSize = vec.GetLocalSize();
   return ConstIterator(*this, localSize);
 }
 

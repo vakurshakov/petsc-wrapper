@@ -39,13 +39,13 @@ Vec Vec::Copy() const {
   return vec;
 }
 
-Int Vec::Size() const {
+Int Vec::GetSize() const {
   Int size;
   PetscCallThrow(VecGetSize(that, &size));
   return size;
 }
 
-Int Vec::LocalSize() const {
+Int Vec::GetLocalSize() const {
   Int localSize;
   PetscCallThrow(VecGetLocalSize(that, &localSize));
   return localSize;

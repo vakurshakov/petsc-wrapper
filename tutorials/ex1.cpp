@@ -19,7 +19,7 @@ int main(int argc, char** argv) {
     auto u = x.Duplicate();
 
     auto [localStart, localEnd] = x.GetOwnershipRange();
-    auto localSize = x.LocalSize();
+    auto localSize = x.GetLocalSize();
 
     Petsc::Mat A(localSize, localSize, globalSize, globalSize, "Linear system");
 

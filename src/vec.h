@@ -28,8 +28,8 @@ class Vec {
   Vec Duplicate() const;
   Vec Copy() const;
 
-  Int Size() const;
-  Int LocalSize() const;
+  Int GetSize() const;
+  Int GetLocalSize() const;
   std::pair<Int, Int> GetOwnershipRange() const;
 
   static Vec WAXPY(Scalar a, const Vec& x, const Vec& y);
