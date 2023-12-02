@@ -63,6 +63,7 @@ class Vec {
   using BorrowedArray = BasicBorrowedArray<false>;
   using ConstBorrowedArray = BasicBorrowedArray<true>;
 
+  /// @todo GetArray1d, GetArray2d, GetArray3d
   BorrowedArray GetArray(GetArrayType type = Default);
   ConstBorrowedArray GetArray() const;
   ConstBorrowedArray GetArrayRead() const;
