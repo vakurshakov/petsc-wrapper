@@ -65,7 +65,7 @@ void setup_index_set(const Petsc::Vec& vec, Petsc::IS& is) {
   is.SetType(ISGENERAL);
   is.GeneralSetIndices(indices.size(), indices.data(), PETSC_COPY_VALUES);
   {
-    Printf(PETSC_COMM_SELF, "\nPrinting indices directly, process [%i]\n", rank);
+    Printf(PETSC_COMM_SELF, "\nPrinting indices directly, process [%]" PetscInt_FMT "\n", rank);
 
     Int isLocalSize = is.GetLocalSize();
     const Int *indices = is.GetIndices();

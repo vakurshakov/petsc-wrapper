@@ -63,7 +63,7 @@ void fill_vector(Petsc::DA& da, Petsc::Vec& vec)  {
   for (Int j = localStart.y; j < localStart.y + localSize.y; ++j) {
   for (Int i = localStart.x; i < localStart.x + localSize.x; ++i) {
     for (Int l = 0; l < dof; l++) {
-      array[k][j][i][l] = l + dof * ((i + globalSize.x * (j + globalSize.y * k)));
+      array[k][j][i][l] = l + dof * (i + globalSize.x * (j + globalSize.y * k));
     }
   }}}
 }
@@ -95,23 +95,25 @@ void load_backup(Petsc::Vec& vec) {
 }
 
 void compare_vectors(const Petsc::Vec& lhs, const Petsc::Vec& rhs) {
-  Petsc::Printf(PETSC_COMM_WORLD, "Vectors comparison:\n");
+  using namespace Petsc;
+  Printf(PETSC_COMM_WORLD, "Vectors comparison:\n");
 
   auto [l_argmin, l_min] = lhs.Min();
   auto [l_argmax, l_max] = lhs.Max();
-  Petsc::Printf(PETSC_COMM_WORLD, "  min(a)     = %+1.2e [argmin %" PetscInt_FMT "]\n", l_min, l_argmin);
-  Petsc::Printf(PETSC_COMM_WORLD, "  max(a)     = %+1.2e [argmax %" PetscInt_FMT "]\n", l_max, l_argmax);
+  Printf(PETSC_COMM_WORLD, "  min(a)     = %+1.2e [argmin %" PetscInt_FMT "]\n", l_min, l_argmin);
+  Printf(PETSC_COMM_WORLD, "  max(a)     = %+1.2e [argmax %" PetscInt_FMT "]\n", l_max, l_argmax);
 
   auto [r_argmin, r_min] = rhs.Min();
   auto [r_argmax, r_max] = rhs.Max();
-  Petsc::Printf(PETSC_COMM_WORLD, "  min(b)     = %+1.2e [argmin %" PetscInt_FMT "]\n", r_min, r_argmin);
-  Petsc::Printf(PETSC_COMM_WORLD, "  max(b)     = %+1.2e [argmax %" PetscInt_FMT "]\n", r_max, r_argmax);
+
+  Printf(PETSC_COMM_WORLD, "  min(b)     = %+1.2e [argmin %" PetscInt_FMT "]\n", r_min, r_argmin);
+  Printf(PETSC_COMM_WORLD, "  max(b)     = %+1.2e [argmax %" PetscInt_FMT "]\n", r_max, r_argmax);
 
   auto [argmin, min] = Petsc::Vec::WAXPY(-1.0, rhs, lhs).Min();
   if (double diff = PetscAbsReal(min); diff > 1.0e-10) {
-    Petsc::Printf(PETSC_COMM_WORLD, "  ERROR: min(|a-b|) > 1.0e-10\n");
-    Petsc::Printf(PETSC_COMM_WORLD, "  min(|a-b|) = %+1.10e\n", diff);
+    Printf(PETSC_COMM_WORLD, "  ERROR: min(|a-b|) > 1.0e-10\n");
+    Printf(PETSC_COMM_WORLD, "  min(|a-b|) = %+1.10e\n", diff);
   } else {
-    Petsc::Printf(PETSC_COMM_WORLD, "  min(|a-b|) < 1.0e-10\n");
+    Printf(PETSC_COMM_WORLD, "  min(|a-b|) < 1.0e-10\n");
   }
 }
