@@ -20,7 +20,7 @@ class DA : public DM {
   PETSC_DEFAULT_COPY_POLICY(DA);
 
   static DA Create();
-  static DA Create1d(BoundaryType boundary, StencilType type, Int global, Int procs, Int dof, Int s, const Int* ranges);
+  static DA Create1d(BoundaryType boundary, Int global, Int dof, Int s, const Int* ranges);
   static DA Create2d(Two<BoundaryType> boundary, StencilType type, Int2 global, Int2 procs, Int dof, Int s, Two<const Int*> ranges);
   static DA Create3d(Three<BoundaryType> boundary, StencilType type, Int3 global, Int3 procs, Int dof, Int s, Three<const Int*> ranges);
 

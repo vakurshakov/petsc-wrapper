@@ -8,7 +8,7 @@
 
 constexpr const char* output_filename = "ex6_out";
 
-void fill_vector(Petsc::DA& da, Petsc::Vec& vec);
+void fill_vector(Petsc::Vec& vec);
 void setup_index_set(const Petsc::DA& da, Petsc::IS& is);
 void save_component(const Petsc::Vec& vec);
 void load_component(Petsc::Vec& vec);
@@ -26,7 +26,7 @@ int main(int argc, char** argv) {
     da.SetUp();
 
     auto x = da.CreateGlobalVector();
-    fill_vector(da, x);
+    fill_vector(x);
 
     auto is = Petsc::IS::Create(PETSC_COMM_WORLD);
     setup_index_set(da, is);
@@ -51,7 +51,7 @@ int main(int argc, char** argv) {
 }
 
 
-void fill_vector(Petsc::DA& da, Petsc::Vec& vec)  {
+void fill_vector(Petsc::Vec& vec)  {
   using namespace Petsc;
 
   auto [rstart, _] = vec.GetOwnershipRange();

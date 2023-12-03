@@ -12,7 +12,7 @@ DA::DA(std::string_view name) : DM(name) {
   return da;
 }
 
-/* static */ DA DA::Create1d(BoundaryType boundary, StencilType type, Int global, Int procs, Int dof, Int s, const Int* ranges) {
+/* static */ DA DA::Create1d(BoundaryType boundary, Int global, Int dof, Int s, const Int* ranges) {
   DA da;
   PetscCallThrow(DMDACreate1d(PETSC_COMM_WORLD,
     boundary, global, dof, s, ranges, da));
